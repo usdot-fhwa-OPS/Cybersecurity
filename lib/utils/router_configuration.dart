@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:cybersecurity_its_app/widgets/bottom_nav_bar.dart';
-import 'package:cybersecurity_its_app/screens/home_screen.dart';
-import 'package:cybersecurity_its_app/screens/device_detail_screen.dart';
-import 'package:cybersecurity_its_app/screens/help_screen.dart';
-import 'package:cybersecurity_its_app/screens/settings_screen.dart';
+import 'package:cybersecurity_its_app/views/home_screen.dart';
+import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
+import 'package:cybersecurity_its_app/views/help_screen.dart';
+import 'package:cybersecurity_its_app/views/settings_screen.dart';
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>(); 
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
