@@ -1,5 +1,5 @@
-import 'package:cybersecurity_its_app/widgets/bottomnavbar.dart';
 import 'package:flutter/material.dart';
+import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,17 +8,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cybersecurity ITS App',
+    return MaterialApp.router(
+      routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.indigo,
       ),
-      home: BottomNavBar(),
     );
   }
 }
