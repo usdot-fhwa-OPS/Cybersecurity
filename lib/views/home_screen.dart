@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: Image.asset('assets/US_DOT_Triskelion.png',
+          child: Image.asset('assets/splash.png',
             fit: BoxFit.contain,
           ),
         ),
