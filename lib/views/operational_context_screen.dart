@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
-  /// Creates a SettingsScreen
-  const SettingsScreen({required this.label, Key? key})
+class OpContextScreen extends StatelessWidget {
+  /// Creates a OpContextScreen
+  const OpContextScreen({required this.label, Key? key})
       : super(key: key);
 
   /// The label
