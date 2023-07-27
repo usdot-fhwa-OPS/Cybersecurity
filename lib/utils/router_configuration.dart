@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cybersecurity_its_app/widgets/bottom_nav_bar.dart';
 import 'package:cybersecurity_its_app/views/home_screen.dart';
 import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
-import 'package:cybersecurity_its_app/views/help_screen.dart';
+import 'package:cybersecurity_its_app/views/help/help_screen.dart';
 import 'package:cybersecurity_its_app/views/settings_screen.dart';
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>(); 

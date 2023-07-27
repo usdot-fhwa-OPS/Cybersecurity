@@ -1,3 +1,4 @@
+import 'package:cybersecurity_its_app/views/help/widgets/checkbox.dart';
 import 'package:flutter/material.dart';
 
 
@@ -15,16 +16,10 @@ class HelpScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(label),
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(label,
-                style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-          ],
-        ),
-      ),
+      body: const SafeArea(
+        child: Center(
+          child: CheckboxWidget()
+          )),
     );
   }
 }
