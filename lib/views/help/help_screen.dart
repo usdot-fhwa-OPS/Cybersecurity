@@ -16,10 +16,10 @@ class HelpScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(label),
       ),
-      body: const SafeArea(
-        child: Center(
-          child: CheckboxWidget()
-          )),
+      body: ListView(
+          children: const [ 
+            CheckboxWidget()
+          ]),
     );
   }
 }
