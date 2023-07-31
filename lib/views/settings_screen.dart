@@ -18,8 +18,17 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(label,
-                style: Theme.of(context).textTheme.titleLarge),
+            ListView(
+              padding: const EdgeInsets.only(top: 8.0),
+              shrinkWrap: true,
+              children: <Widget>[
+                ListTile(
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text('Logout'),
+                  onTap: () {},
+                )
+              ],
+            ),
             const Padding(padding: EdgeInsets.all(4)),
           ],
         ),

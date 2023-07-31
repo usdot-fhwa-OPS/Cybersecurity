@@ -6,11 +6,13 @@ import 'package:cybersecurity_its_app/views/home_screen.dart';
 import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
 import 'package:cybersecurity_its_app/views/help_screen.dart';
 import 'package:cybersecurity_its_app/views/settings_screen.dart';
+import 'package:cybersecurity_its_app/views/login_screen_temp.dart';
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>(); 
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
+final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
 
 /// The route configuration.
 final goRouter = GoRouter(
@@ -69,6 +71,18 @@ final goRouter = GoRouter(
               path: '/Settings',
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: SettingsScreen(label: 'Settings'),
+              ),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorDKey,
+          routes: [
+            // top route inside branch
+            GoRoute(
+              path: '/Login',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: LoginScreen(label: 'Login'),
               ),
             ),
           ],

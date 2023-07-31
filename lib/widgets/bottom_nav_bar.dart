@@ -31,7 +31,8 @@ class BottomNavBar extends StatelessWidget {
         destinations: const [
           NavigationDestination(label: 'Device', icon: Icon(Icons.traffic)),
           NavigationDestination(label: 'Help', icon: Icon(Icons.textsms)),
-          NavigationDestination(label: 'Account', icon: Icon(Icons.account_circle))
+          NavigationDestination(label: 'Account', icon: Icon(Icons.account_circle)),
+          NavigationDestination(label: 'Login', icon: Icon(Icons.login))
         ],
         onDestinationSelected: _goBranch,
         
