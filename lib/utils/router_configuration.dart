@@ -35,7 +35,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/Home',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: HomeScreen(label: 'Field Device Security Configuration Tool', detailsPath: '/Home/details', settingsPath: '/Home/settings',),
+                child: HomeScreen(label: 'ITS Device Security', detailsPath: '/Home/details', settingsPath: '/Home/settings',),
               ),
               routes: [
                 // child route
