@@ -53,6 +53,7 @@ class CheckboxWidgetState extends State {
                   }
                   _fields[index]["value"] = value;
                 });
+                if (_fields[index]["value"] == true) print(_fields[index]);
               },
             ),
           ),
