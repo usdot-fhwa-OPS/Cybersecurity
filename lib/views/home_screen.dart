@@ -22,12 +22,12 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: 8),
           child: Image.asset('assets/splash.png',
             fit: BoxFit.contain,
           ),
         ),
-        leadingWidth: 40,
+        leadingWidth: 50,
         
         title: Text(label),
         centerTitle: true,
