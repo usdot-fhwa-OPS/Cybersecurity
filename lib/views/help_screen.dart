@@ -14,6 +14,10 @@ class HelpScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(label),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(

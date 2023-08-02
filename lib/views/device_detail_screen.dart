@@ -21,7 +21,11 @@ class DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
         title: Text(widget.label),
+        titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
