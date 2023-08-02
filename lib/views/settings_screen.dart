@@ -8,6 +8,10 @@ class SettingsScreen extends StatelessWidget {
   /// The label
   final String label;
 
+  logoutButtonPressed() {
+    print('Logout Pressed.');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,15 +29,19 @@ class SettingsScreen extends StatelessWidget {
             ListView(
               padding: const EdgeInsets.only(top: 8.0),
               shrinkWrap: true,
-              children: <Widget>[
-                ListTile(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('Logout'),
-                  onTap: () {},
-                )
-              ],
+              children: <Widget>[],
             ),
             const Padding(padding: EdgeInsets.all(4)),
+            Expanded(
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: MaterialButton(
+                    color: Colors.deepOrange,
+                    onPressed: () => logoutButtonPressed(),
+                    child: const Text('Logout')
+              )
+                ),
+            )
           ],
         ),
       ),
