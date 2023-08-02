@@ -1,3 +1,4 @@
+import 'package:cybersecurity_its_app/views/operational_context_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,7 +37,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/Home',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: HomeScreen(label: 'Field Device Security Configuration Tool', detailsPath: '/Home/details'),
+                child: HomeScreen(label: 'ITS Device Security', detailsPath: '/Home/details', settingsPath: '/Home/settings',),
               ),
               routes: [
                 // child route
@@ -45,6 +46,13 @@ final goRouter = GoRouter(
                   builder: (context, state) =>
                       const DetailsScreen(label: 'Select Vendor and Model'),
                 ),
+                GoRoute(
+                  path: 'settings',
+                  pageBuilder: (context, state) => const NoTransitionPage(
+                  child: SettingsScreen(label: 'Settings'),
+              ),
+            ),
+                
               ],
             ),
           ],
@@ -62,15 +70,15 @@ final goRouter = GoRouter(
             ),
           ],
         ),
-        // third branch (Settings)
+        // third branch (Operational Context)
         StatefulShellBranch(
           navigatorKey: _shellNavigatorCKey,
           routes: [
             // top route inside branch
             GoRoute(
-              path: '/Settings',
+              path: '/OpContext',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: SettingsScreen(label: 'Settings'),
+                child: OpContextScreen(label: 'Operational Context'),
               ),
             ),
           ],

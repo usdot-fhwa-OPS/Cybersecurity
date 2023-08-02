@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-
-class HelpScreen extends StatelessWidget {
-  /// Creates a HelpScreen
-  const HelpScreen({required this.label, Key? key})
+class OpContextScreen extends StatelessWidget {
+  /// Creates a OpContextScreen
+  const OpContextScreen({required this.label, Key? key})
       : super(key: key);
 
   /// The label
@@ -14,8 +13,8 @@ class HelpScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(label),
-        backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
         centerTitle: true,
       ),
