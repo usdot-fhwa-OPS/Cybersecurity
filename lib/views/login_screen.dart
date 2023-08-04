@@ -15,19 +15,25 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(label),
+        centerTitle: true,
+        titleTextStyle: const TextStyle(fontSize: 18),
       ),
       body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              // log a user in, letting all the listeners know
-              context.read<LoginInfo>().login('test-user');
-
-              // router will automatically redirect from /Login to / using
-              // refreshListenable
-            },
-            child: const Text('Login'),
-          ),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,                        
+          children: [   
+            const Image(
+              image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.read<LoginInfo>().login('test-user');
+              },
+              child: const Text('Login'),
+            ),
+          ],                                   
         ),
+      ),
     );
   }
 }

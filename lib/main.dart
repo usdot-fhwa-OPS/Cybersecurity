@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           routerConfig: goRouter,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch: Colors.indigo,
+            primarySwatch: Colors.grey,
           ),
         ),
       );
