@@ -18,26 +18,35 @@ class LoginScreen extends StatelessWidget {
         centerTitle: true,
         titleTextStyle: const TextStyle(fontSize: 18),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(15),
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: TabBar(
-                tabs: [
-                  Tab(text: 'Login',),
-                  Tab(text: 'Register'),
-                ],
-                labelColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            const Expanded(
+              child: DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                appBar: TabBar(
+                    tabs: [
+                      Tab(text: 'Login',),
+                      Tab(text: 'Register'),
+                    ],
+                    labelColor: Colors.black,
+                  ),
+                body: TabBarView(
+                  children: [
+                    LoginTab(),
+                    RegisterTab(),
+                    ],
+                  ),
+                ),
               ),
-            body: TabBarView(
-
-              children: [
-                LoginTab(),
-                RegisterTab(),
-              ],
             ),
-          ),
+            Image.asset('assets/logo.png',
+              fit: BoxFit.contain,
+              height: 55,
+            ),
+          ],
         ),
       ),
     );
@@ -120,11 +129,6 @@ class LoginTab extends StatelessWidget {
             ),
           ),
         ),
-        const Spacer(),
-        Image.asset('assets/logo.png',
-          fit: BoxFit.contain,
-          height: 55,
-        ),
       ],
     );
   }
@@ -205,11 +209,6 @@ class RegisterTab extends StatelessWidget {
             ),
           ),
         ),
-          const Spacer(),
-          Image.asset('assets/logo.png',
-            fit: BoxFit.contain,
-            height: 55,
-          ),
       ],
     );
   }
