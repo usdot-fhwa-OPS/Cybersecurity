@@ -1,14 +1,19 @@
 import 'package:cybersecurity_its_app/views/help/widgets/checkbox.dart';
 import 'package:flutter/material.dart';
 
-
-class HelpScreen extends StatelessWidget {
-  /// Creates a HelpScreen
+class HelpScreen extends StatefulWidget {
   const HelpScreen({required this.label, Key? key})
       : super(key: key);
 
   /// The label
   final String label;
+  
+  @override
+  State<HelpScreen> createState() => HelpScreenState();
+}
+class HelpScreenState extends State<HelpScreen> {
+  final TextEditingController textController = TextEditingController();
+  bool buttonEnabler = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +24,16 @@ class HelpScreen extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(label),
+          title: Text(widget.label),
         ),
         body: ListView(
           children: [ 
             const CheckboxWidget(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
-                decoration: InputDecoration(
+                controller: textController,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Describe the issue",
                     alignLabelWithHint: true,
@@ -35,17 +41,26 @@ class HelpScreen extends StatelessWidget {
                 maxLength: 200,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
+                onChanged: (data) {
+                  if (textController.text.isEmpty) {
+                    buttonEnabler = false;
+                  } else {
+                    buttonEnabler = true;
+                  }
+                  setState(() {});
+                }
               )
             ),
-            Padding (
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              
-              //TODO - Disable button if textfield is empty or if checkbox value is null
-              child: ElevatedButton(
-                style: style,
-                onPressed: () {},
-                child: const Text('Submit'),
-              ),
+            Tooltip(
+              message: 'i am a tooltip',
+              child: Padding (
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                child: ElevatedButton(
+                  style: style,
+                  onPressed: buttonEnabler ? () => print(textController.text) : null,
+                  child: const Text('Submit'),
+                ),
+              )
             )
           ]
         ),
