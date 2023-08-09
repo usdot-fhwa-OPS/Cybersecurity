@@ -46,7 +46,7 @@ final goRouter = GoRouter(
                 ),
                 GoRoute(
                   path: 'settings',
-                  pageBuilder: (context, state) => const NoTransitionPage(
+                  pageBuilder: (context, state) => NoTransitionPage(
                   child: SettingsScreen(label: 'Settings'),
               ),
             ),
