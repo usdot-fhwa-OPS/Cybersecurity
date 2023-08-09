@@ -16,14 +16,13 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Testing <$label>");
 
     return Scaffold(
       appBar: AppBar(
         title: Text(label),
         iconTheme: IconThemeData(
           color: Colors.black,
-          size: (24 * Provider.of<ZoomInfo>(context).zoomLevel),
+          size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),
         ),
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
@@ -37,22 +36,9 @@ class SettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               shrinkWrap: true,
               children: <Widget>[
-                TextButton(
-                    onPressed: () async {
-                      double mult = Provider.of<ZoomInfo>(context, listen: false).zoomLevel + 0.2;
-
-                      context.read<ZoomInfo>().updateZoom(mult);
-                    },
-                    child: const Text('Change text')),
-                TextButton(
-                    onPressed: () async {
-                      context.read<ZoomInfo>().updateZoom(1);
-                    },
-                    child: const Text('Reset')),
                 ZoomLevelAdjustment(),
               ],
             ),
-            const Padding(padding: EdgeInsets.all(4)),
             Expanded(
                 child: Align(
                     alignment: FractionalOffset.bottomCenter,
@@ -87,12 +73,20 @@ class ZoomLevelAdjustment extends StatelessWidget {
 
     return Row(
       children: [
+        Expanded(
+            child: Align (
+              alignment: Alignment.centerRight,
+              child: Icon(Icons.zoom_in,
+                size: (18 * Provider.of<ZoomInfo>(context).zoomLevel),
+              ),
+            ),
+        ),
         const Expanded(
           child: Padding(
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.only(right: 1),
               child: Text(
                 "Zoom Level",
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.center,
               )),
         ),
         Expanded(
@@ -101,9 +95,6 @@ class ZoomLevelAdjustment extends StatelessWidget {
                 padding: const EdgeInsets.all(1),
                 child: DropdownButton(
                   value: Provider.of<ZoomInfo>(context, listen: false).zoomLevel,
-                  icon: Icon(Icons.zoom_in, size: (18 * Provider
-                      .of<ZoomInfo>(context)
-                      .zoomLevel),),
                   onChanged: (double? value) {
                     zoomLevelChanged(context, value);
                   },

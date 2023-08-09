@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (runOnce){
-      print("Original Zoom: ${Provider.of<ZoomInfo>(context).zoomLevel}");
       runOnce = false;
       Provider.of<ZoomInfo>(context).initZoomLevelStore();
     }

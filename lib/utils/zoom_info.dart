@@ -13,15 +13,17 @@ class ZoomInfo extends ChangeNotifier {
   double get zoomLevel => _zoomLevel;
   double _zoomLevel = 1;
 
+  // Takes in new zoom level, stores it in SharedPreferences
+  // and notifies listeners.
   void updateZoom(double zoomLevel) {
     _zoomLevel = zoomLevel;
-
-    print("new Zoom: $_zoomLevel");
 
     _storeZoomLevel(zoomLevel);
     notifyListeners();
   }
 
+  // Initialize SharedPreferences. Check if zoom level is present,
+  // grab stored value if so, if not set to 1 by default.
   void initZoomLevelStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -30,11 +32,13 @@ class ZoomInfo extends ChangeNotifier {
     _zoomLevel = zoomLevel;
   }
 
+  // Store updated zoom level in SharedPreferences.
   void _storeZoomLevel(double zoomLevel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setDouble('zoomLevel', zoomLevel);
   }
 
+  // Grab stored zoom level from SharedPreferences.
   Future<double> getStoredZoomLevel() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
