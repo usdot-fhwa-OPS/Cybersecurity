@@ -67,7 +67,6 @@ class LoginTab extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: TextField(
-              obscureText: true,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email',
@@ -148,7 +147,6 @@ class RegisterTab extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: TextField(
-              obscureText: true,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Name',
@@ -161,7 +159,6 @@ class RegisterTab extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: TextField(
-              obscureText: true,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email',

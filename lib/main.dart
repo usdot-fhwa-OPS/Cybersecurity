@@ -3,7 +3,6 @@ import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:provider/provider.dart';
 
-
 final LoginInfo _loginInfo = LoginInfo();
 
 void main() {
@@ -13,9 +12,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider<LoginInfo>.value(
+  Widget build(BuildContext context) => GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: ChangeNotifierProvider<LoginInfo>.value(
         value: _loginInfo,
         child: MaterialApp.router(
           routerConfig: goRouter,
@@ -24,5 +24,6 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.indigo,
           ),
         ),
-      );
+      ),
+    );
 }
