@@ -19,14 +19,14 @@ class LoginScreen extends StatelessWidget {
         titleTextStyle: const TextStyle(fontSize: 18),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.only(top: 15, right: 15, left: 15),
         child: Column(
           children: [
             const Expanded(
               child: DefaultTabController(
-              length: 2,
-              child: Scaffold(
-                appBar: TabBar(
+                length: 2,
+                child: Scaffold(
+                  appBar: TabBar(
                     tabs: [
                       Tab(text: 'Login',),
                       Tab(text: 'Register'),
@@ -42,9 +42,15 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Image.asset('assets/logo.png',
-              fit: BoxFit.contain,
-              height: 55,
+            Visibility(
+              visible: (MediaQuery.of(context).viewInsets.bottom == 0) ? true : false,
+              child: Padding( 
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Image.asset('assets/logo.png',
+                  fit: BoxFit.contain,
+                  height: 55,
+                ),
+              ),
             ),
           ],
         ),
@@ -60,7 +66,7 @@ class LoginTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         const Padding(
           padding: EdgeInsets.only(top: 15.0),
@@ -115,7 +121,7 @@ class LoginTab extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 20.0),
+          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: GestureDetector(
@@ -140,7 +146,7 @@ class RegisterTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         const Padding(
           padding: EdgeInsets.only(top: 15.0),
@@ -193,7 +199,7 @@ class RegisterTab extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 20.0),
+          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: GestureDetector(
