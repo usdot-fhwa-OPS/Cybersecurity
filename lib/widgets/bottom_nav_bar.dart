@@ -35,15 +35,15 @@ class BottomNavBar extends StatelessWidget {
           NavigationDestination(
               label: 'Device',
               icon: Icon(Icons.traffic,
-                size: (26 * Provider.of<ZoomInfo>(context).zoomLevel),)),
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),)),
           NavigationDestination(
               label: 'Help',
               icon: Icon(Icons.textsms,
-                size: (26 * Provider.of<ZoomInfo>(context).zoomLevel),)),
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),)),
           NavigationDestination(
               label: 'Account',
               icon: Icon(Icons.account_circle,
-                size: (26 * Provider.of<ZoomInfo>(context).zoomLevel),))
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),))
         ],
         onDestinationSelected: _goBranch,
       ),

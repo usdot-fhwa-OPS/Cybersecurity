@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
           size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),
         ),
         backgroundColor: Colors.white,
-        titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
+        titleTextStyle: TextStyle(fontSize: 16, color: Colors.black),
         centerTitle: true,
       ),
       body: Center(
@@ -72,40 +72,45 @@ class ZoomLevelAdjustment extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-            child: Align (
-              alignment: Alignment.centerRight,
-              child: Icon(Icons.zoom_in,
-                size: (18 * Provider.of<ZoomInfo>(context).zoomLevel),
-              ),
-            ),
+        Align (
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child:
+                Icon(Icons.zoom_in,
+                  size: (18 * Provider.of<ZoomInfo>(context).zoomLevel),
+                )),
+              const Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Text(
+                    "Zoom Level",
+                    textAlign: TextAlign.center,
+                  )),
+            ],
+          ),
         ),
-        const Expanded(
-          child: Padding(
-              padding: EdgeInsets.only(right: 1),
-              child: Text(
-                "Zoom Level",
-                textAlign: TextAlign.center,
-              )),
-        ),
-        Expanded(
-            child:
-            Padding(
-                padding: const EdgeInsets.all(1),
-                child: DropdownButton(
-                  value: Provider.of<ZoomInfo>(context, listen: false).zoomLevel,
-                  onChanged: (double? value) {
-                    zoomLevelChanged(context, value);
-                  },
-                  items: zoomListLabel
-                      .map<DropdownMenuItem<double>>((double value) {
-                    return DropdownMenuItem<double>(
-                      value: value,
-                      child: Text("$value"),
-                    );
-                  }).toList(),
-            )),
+        Padding(
+          padding: const EdgeInsets.all(1),
+          child: DropdownButton(
+            underline: const SizedBox(),
+            value: Provider.of<ZoomInfo>(context, listen: false).zoomLevel,
+            onChanged: (double? value) {
+              zoomLevelChanged(context, value);
+            },
+            items: zoomListLabel
+                .map<DropdownMenuItem<double>>((double value) {
+              return DropdownMenuItem<double>(
+                value: value,
+                child: Text("$value"),
+              );
+            }).toList(),
+          )
         ),
       ],
     );

@@ -33,8 +33,6 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8),
           child: Image.asset('assets/splash.png',
             fit: BoxFit.contain,
-            height: (26 * Provider.of<ZoomInfo>(context).zoomLevel),
-            width: (26 * Provider.of<ZoomInfo>(context).zoomLevel),
           ),
         ),
         leadingWidth: 50,
