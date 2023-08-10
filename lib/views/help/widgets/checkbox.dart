@@ -10,7 +10,7 @@ class CheckboxWidget extends StatefulWidget {
 class CheckboxWidgetState extends State {
   final List _fields = [
     {
-      "value": false,
+      "value": true,
       "text": "Missing Field Device"
     },
     {

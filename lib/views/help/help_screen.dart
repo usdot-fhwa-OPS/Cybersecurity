@@ -1,5 +1,7 @@
 import 'package:cybersecurity_its_app/views/help/widgets/checkbox.dart';
+import 'package:cybersecurity_its_app/providers/buttonEnablerProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({required this.label, Key? key})
@@ -13,7 +15,8 @@ class HelpScreen extends StatefulWidget {
 }
 class HelpScreenState extends State<HelpScreen> {
   final TextEditingController textController = TextEditingController();
-  bool buttonEnabler = false;
+  final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +44,29 @@ class HelpScreenState extends State<HelpScreen> {
                 maxLength: 200,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
-                onChanged: (data) {
+                onChanged: (String value) {
                   if (textController.text.isEmpty) {
-                    buttonEnabler = false;
+                    context.read<ButtonEnabler>().disable();
                   } else {
-                    buttonEnabler = true;
+                    context.read<ButtonEnabler>().enable();
                   }
-                  setState(() {});
                 }
               )
             ),
             Tooltip(
-              message: 'i am a tooltip',
+              message: 'Error: Please include a description of your issue.',
+              key: tooltipkey,
+              triggerMode: TooltipTriggerMode.manual,
+              showDuration: const Duration(seconds: 1),
               child: Padding (
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
-                  onPressed: buttonEnabler ? () => print(textController.text) : null,
+                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print(textController.text) : () => tooltipkey.currentState?.ensureTooltipVisible(),
                   child: const Text('Submit'),
                 ),
               )
-            )
+            ),
           ]
         ),
       )
