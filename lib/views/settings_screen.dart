@@ -11,6 +11,7 @@ class SettingsScreen extends StatelessWidget {
   final String label;
 
   logoutButtonPressed() {
+    /// Todo: Pending backend details.
     print('Logout Pressed.');
   }
 
@@ -45,9 +46,11 @@ class SettingsScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 2),
                       child: MaterialButton(
-                        color: Colors.deepOrange,
+                        color: Colors.indigo,
                         onPressed: () => logoutButtonPressed(),
-                        child: const Text('Logout'),
+                        child: const Text('Logout',
+                            style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ))),
           ],
@@ -66,6 +69,8 @@ class ZoomLevelAdjustment extends StatelessWidget {
   }
 
   double zoomLevel = 1;
+
+  // Zoom levels. Clear app cache/data before running app after change.
   static final List<double> zoomListLabel = <double>[1.0, 1.25, 1.5, 2];
 
   @override

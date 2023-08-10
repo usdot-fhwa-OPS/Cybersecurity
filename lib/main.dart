@@ -9,6 +9,8 @@ void main() {
 
 final ZoomInfo _zoomInfo = ZoomInfo();
 
+
+/// Initializes all providers, before building the main app.
 class AppProviders extends StatelessWidget {
   const AppProviders({super.key});
 
@@ -17,7 +19,7 @@ class AppProviders extends StatelessWidget {
       MultiProvider(
           providers: [
             ChangeNotifierProvider(
-                create: (_) => _zoomInfo)
+                create: (_) => _zoomInfo),
           ],
         child: MyApp(),
       );
@@ -30,12 +32,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    /// Initialize Store and zoom level only on first build.
     if (runOnce){
       runOnce = false;
       Provider.of<ZoomInfo>(context).initZoomLevelStore();
     }
     return MaterialApp.router(
       builder: (BuildContext context, Widget? child) {
+
+        /// Get Current Media info, and multiply by user settings.
         final MediaQueryData data = MediaQuery.of(context);
         return MediaQuery(
           data: data.copyWith(
