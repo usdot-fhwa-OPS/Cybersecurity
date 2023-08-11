@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
+import 'package:cybersecurity_its_app/utils/login_info.dart';
 
 class SettingsScreen extends StatelessWidget {
   /// Creates a SettingsScreen
@@ -10,9 +11,8 @@ class SettingsScreen extends StatelessWidget {
   /// The label
   final String label;
 
-  logoutButtonPressed() {
-    /// Todo: Pending backend details.
-    print('Logout Pressed.');
+  logoutButtonPressed(BuildContext context) {
+    Provider.of<LoginInfo>(context, listen: false).logout();
   }
 
   @override
@@ -47,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 2),
                       child: MaterialButton(
                         color: Colors.indigo,
-                        onPressed: () => logoutButtonPressed(),
+                        onPressed: () => logoutButtonPressed(context),
                         child: const Text('Logout',
                             style: TextStyle(color: Colors.white),
                         ),
