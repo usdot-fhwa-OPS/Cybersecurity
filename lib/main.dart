@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cybersecurity_its_app/utils/router_configuration.dart';
+import 'package:cybersecurity_its_app/utils/login_info.dart';
+import 'package:provider/provider.dart';
+
+final LoginInfo _loginInfo = LoginInfo();
 import 'package:provider/provider.dart';
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
 
@@ -57,5 +61,4 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
       ),
     );
-  }
 }
