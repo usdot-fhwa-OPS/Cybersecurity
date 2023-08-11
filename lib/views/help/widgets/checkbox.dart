@@ -1,4 +1,6 @@
+import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CheckboxWidget extends StatefulWidget {
   const CheckboxWidget({super.key});
@@ -8,24 +10,6 @@ class CheckboxWidget extends StatefulWidget {
 }
 
 class CheckboxWidgetState extends State {
-  final List _fields = [
-    {
-      "value": true,
-      "text": "Missing Field Device"
-    },
-    {
-      "value": false,
-      "text": "Problems with App",
-    },
-    {
-      "value": false,
-      "text": "Wrong Security Recommendation",
-    },
-    {
-      "value": false,
-      "text": "Other",
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -33,27 +17,22 @@ class CheckboxWidgetState extends State {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 32.0),
         child: Column(
           children: List.generate(
-            _fields.length,
+           context.watch<IssueCheckboxList>().numOfFields,
             (index) => CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
               dense: true,
               title: Text (
-                _fields[index]["text"],
+                context.watch<IssueCheckboxList>().fields.keys.elementAt(index),
                 style: const TextStyle(
                   fontSize: 16.0,
                   color: Colors.black,
                 ),
               ),
-              value: _fields[index]["value"],
+              value: context.watch<IssueCheckboxList>().fields.values.elementAt(index),
               onChanged:(value) {
-                setState(() {
-                  for (var element in _fields) {
-                    element["value"] = false;
-                  }
-                  _fields[index]["value"] = value;
-                });
-                if (_fields[index]["value"] == true) print(_fields[index]);
+                context.read<IssueCheckboxList>().onSelection(index, value!);
+                context.read<IssueCheckboxList>().updateCurrentValue();
               },
             ),
           ),

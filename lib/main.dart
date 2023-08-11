@@ -1,8 +1,9 @@
-import 'package:cybersecurity_its_app/providers/buttonEnablerProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
+import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 void main() {
   runApp(
     /// Providers are above [MyApp] instead of inside it, so that tests
@@ -10,6 +11,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ButtonEnabler()),
+        ChangeNotifierProvider(create:(_) => IssueCheckboxList()),
       ],
       child: const MyApp(),
     ),

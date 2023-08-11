@@ -1,5 +1,6 @@
 import 'package:cybersecurity_its_app/views/help/widgets/checkbox.dart';
-import 'package:cybersecurity_its_app/providers/buttonEnablerProvider.dart';
+import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
+import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +63,7 @@ class HelpScreenState extends State<HelpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
-                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print(textController.text) : () => tooltipkey.currentState?.ensureTooltipVisible(),
+                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print(Provider.of<IssueCheckboxList>(context, listen: false).currentValue) : () => tooltipkey.currentState?.ensureTooltipVisible(),
                   child: const Text('Submit'),
                 ),
               )
