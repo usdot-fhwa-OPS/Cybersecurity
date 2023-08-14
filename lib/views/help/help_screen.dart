@@ -63,6 +63,7 @@ class HelpScreenState extends State<HelpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
+                  //TODO: POST below and textController.text when server is set up
                   onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print(Provider.of<IssueCheckboxList>(context, listen: false).currentValue) : () => tooltipkey.currentState?.ensureTooltipVisible(),
                   child: const Text('Submit'),
                 ),
