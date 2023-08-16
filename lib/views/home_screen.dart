@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/zoom_info.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatelessWidget {
@@ -17,10 +20,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+          size: (26 * Provider
+              .of<ZoomInfo>(context)
+              .zoomLevel)),
         leading: Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Image.asset('assets/splash.png',
@@ -28,12 +36,18 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         leadingWidth: 50,
-        
+
         title: Text(label),
         centerTitle: true,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
         actions: [
-          IconButton(onPressed: () => context.go(settingsPath), icon: const Icon(Icons.settings)),
+          IconButton(
+              onPressed: () => context.go(settingsPath),
+              icon: Icon(Icons.settings,
+                size: (22 * Provider
+                    .of<ZoomInfo>(context)
+                    .zoomLevel),),
+          )
         ],
       ),
       body: Center(

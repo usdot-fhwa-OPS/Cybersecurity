@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/zoom_info.dart';
 
 // Stateful navigation based on:
 // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
@@ -28,13 +31,21 @@ class BottomNavBar extends StatelessWidget {
       // BottomNavigationBar implementation with three tabs.
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        destinations: const [
-          NavigationDestination(label: 'Device', icon: Icon(Icons.traffic)),
-          NavigationDestination(label: 'Help', icon: Icon(Icons.textsms)),
-          NavigationDestination(label: 'Account', icon: Icon(Icons.account_circle))
+        destinations: [
+          NavigationDestination(
+              label: 'Device',
+              icon: Icon(Icons.traffic,
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),)),
+          NavigationDestination(
+              label: 'Help',
+              icon: Icon(Icons.textsms,
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),)),
+          NavigationDestination(
+              label: 'Account',
+              icon: Icon(Icons.account_circle,
+                size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),))
         ],
         onDestinationSelected: _goBranch,
-        
       ),
     );
   }
