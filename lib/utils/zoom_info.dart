@@ -30,6 +30,8 @@ class ZoomInfo extends ChangeNotifier {
     double zoomLevel = prefs.getDouble('zoomLevel') ?? 1;
 
     _zoomLevel = zoomLevel;
+
+    notifyListeners();
   }
 
   // Store updated zoom level in SharedPreferences.
