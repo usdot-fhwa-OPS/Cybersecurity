@@ -163,39 +163,42 @@ class Device extends StatelessWidget {
 
     @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-          color: Colors.grey,
+    return GestureDetector(
+      onTap:  () => context.go('/Home/details'),
+      child: Card(
+        elevation: 3,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-      ),
-      child: SizedBox(
-        width: 120,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: 
-              Image.asset(image,
-                  fit: BoxFit.cover,
-                )
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 15),
+        child: SizedBox(
+          width: 120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: 
+                Image.asset(image,
+                    fit: BoxFit.cover,
+                  )
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Text(
-                description,
-                style: const TextStyle(fontSize: 13),
+              Padding(
+                padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 15),
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(
+                  description,
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
