@@ -42,7 +42,7 @@ class HelpScreenState extends State<HelpScreen> {
                     labelText: "Describe the issue",
                     alignLabelWithHint: true,
                 ),
-                maxLength: 200,
+                maxLength: 1200,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 onChanged: (String value) {
