@@ -64,7 +64,7 @@ class HelpScreenState extends State<HelpScreen> {
                 child: ElevatedButton(
                   style: style,
                   //TODO: POST below and textController.text when server is set up
-                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print(Provider.of<IssueCheckboxList>(context, listen: false).currentValue) : () => tooltipkey.currentState?.ensureTooltipVisible(),
+                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print('checkbox val: ${Provider.of<IssueCheckboxList>(context, listen: false).currentValue}, textbox val: ${textController.text}') : () => tooltipkey.currentState?.ensureTooltipVisible(),
                   child: const Text('Submit'),
                 ),
               )
