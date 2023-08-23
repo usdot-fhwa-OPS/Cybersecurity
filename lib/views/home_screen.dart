@@ -130,7 +130,7 @@ class Category extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: SizedBox(
-              height: 150,
+              height: 150 * MediaQuery.of(context).textScaleFactor,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: devices.length,
@@ -174,7 +174,7 @@ class Device extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
         child: SizedBox(
-          width: 120,
+          width: 120 * MediaQuery.of(context).textScaleFactor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -184,14 +184,14 @@ class Device extends StatelessWidget {
                   )
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
+                padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
                 child: Text(
                   label,
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(3.0),
+                padding: const EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
                 child: Text(
                   description,
                   style: const TextStyle(fontSize: 13),
