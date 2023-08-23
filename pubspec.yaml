@@ -75,6 +75,12 @@ flutter:
   assets:
     - assets/splash.png
     - assets/logo.png
+    - assets/demo1.png
+    - assets/demo2.png
+    - assets/demo3.png
+    - assets/demo4.png
+    - assets/demo5.png
+    - assets/demo6.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

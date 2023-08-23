@@ -37,7 +37,7 @@ final goRouter = GoRouter(
             // top route inside branch
             GoRoute(
               path: '/Home',
-              pageBuilder: (context, state) => const NoTransitionPage(
+              pageBuilder: (context, state) => NoTransitionPage(
                 child: HomeScreen(label: 'ITS Device Security', detailsPath: '/Home/details', settingsPath: '/Home/settings',),
               ),
               routes: [
