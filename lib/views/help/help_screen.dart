@@ -29,6 +29,10 @@ class HelpScreenState extends State<HelpScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.label),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black),
+          titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
+          centerTitle: true,
         ),
         body: ListView(
           children: [ 

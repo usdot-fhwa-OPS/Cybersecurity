@@ -26,7 +26,7 @@ class CheckboxWidgetState extends State {
                 context.watch<IssueCheckboxList>().fields.keys.elementAt(index),
                 style: const TextStyle(
                   fontSize: 16.0,
-                  color: Colors.black,
+                  //color: Colors.black,
                 ),
               ),
               value: context.watch<IssueCheckboxList>().fields.values.elementAt(index),
