@@ -1,8 +1,11 @@
+import 'package:cybersecurity_its_app/views/operational_context_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:cybersecurity_its_app/widgets/bottom_nav_bar.dart';
 import 'package:cybersecurity_its_app/views/home_screen.dart';
+import 'package:cybersecurity_its_app/views/login_screen.dart';
 import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
 import 'package:cybersecurity_its_app/views/help/help_screen.dart';
 import 'package:cybersecurity_its_app/views/settings_screen.dart';
@@ -11,6 +14,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
+final _loginInfo = LoginInfo();
 
 /// The route configuration.
 final goRouter = GoRouter(
@@ -33,8 +37,8 @@ final goRouter = GoRouter(
             // top route inside branch
             GoRoute(
               path: '/Home',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: HomeScreen(label: 'Field Device Security Configuration Tool', detailsPath: '/Home/details'),
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: HomeScreen(label: 'ITS Device Security', detailsPath: '/Home/details', settingsPath: '/Home/settings',),
               ),
               routes: [
                 // child route
@@ -43,6 +47,13 @@ final goRouter = GoRouter(
                   builder: (context, state) =>
                       const DetailsScreen(label: 'Select Vendor and Model'),
                 ),
+                GoRoute(
+                  path: 'settings',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                  child: SettingsScreen(label: 'Settings'),
+              ),
+            ),
+                
               ],
             ),
           ],
@@ -60,20 +71,50 @@ final goRouter = GoRouter(
             ),
           ],
         ),
-        // third branch (Settings)
+        // third branch (Operational Context)
         StatefulShellBranch(
           navigatorKey: _shellNavigatorCKey,
           routes: [
             // top route inside branch
             GoRoute(
-              path: '/Settings',
+              path: '/OpContext',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: SettingsScreen(label: 'Settings'),
+                child: OpContextScreen(label: 'Operational Context'),
               ),
             ),
           ],
         ),
       ],
     ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/Login',
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: LoginScreen(label: 'ITS Device Security Login'),
+      ),
+    ),
+
   ],
+
+  // redirect to the login page if the user is not logged in
+    redirect: (BuildContext context, GoRouterState state) {
+      // if the user is not logged in, they need to login
+      final bool loggedIn = _loginInfo.loggedIn;
+      final bool loggingIn = state.matchedLocation == '/Login';
+      if (!loggedIn) {
+        return '/Login';
+      }
+
+      // if the user is logged in but still on the login page, send them to
+      // the home page
+      if (loggingIn) {
+        return '/Home';
+      }
+
+      // no need to redirect at all
+      return null;
+    },
+
+    // changes on the listenable will cause the router to refresh it's route
+    refreshListenable: _loginInfo,
 );
