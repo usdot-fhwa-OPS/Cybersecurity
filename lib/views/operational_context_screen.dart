@@ -29,6 +29,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
       typeEntries.add(DropdownMenuEntry<ConnectionType>(value: type, label: type.label));
     }
 
+    //Intended Use Dropdown
     final List<DropdownMenuEntry<IntendedUse>> useEntries = 
             <DropdownMenuEntry<IntendedUse>>[];
     for (final IntendedUse use in IntendedUse.values) {
@@ -47,67 +48,68 @@ class _OpContextScreenState extends State<OpContextScreen> {
         centerTitle: true,
       ),
       body: ListView(
-          children: <Widget>[
-            const Padding(padding: EdgeInsets.all(16)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Connection Type',
-                style: Theme.of(context).textTheme.titleLarge),
-            ),
-            const Padding(padding: EdgeInsets.all(4)),
-            // Connection Type Dropdown
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DropdownMenu<ConnectionType>(
-                  width: 250.0,
-                  initialSelection: ConnectionType.cell,
-                  controller: typeController,
-                  dropdownMenuEntries: typeEntries,
-                  onSelected: (ConnectionType? type) {
-                    setState(() {
-                      selectedType = type;
-                    });
-                  }
-              ),
-            ),
-            const Padding(padding: EdgeInsets.all(16.0)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Intended Use',
-                style: Theme.of(context).textTheme.titleLarge),
-            ),
-            const Padding(padding: EdgeInsets.all(4)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DropdownMenu<IntendedUse>(
+        children: <Widget>[
+          // Connection Type Dropdown
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
+            child: Text('Connection Type',
+              style: Theme.of(context).textTheme.titleLarge),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+            child: DropdownMenu<ConnectionType>(
                 width: 250.0,
-                initialSelection: IntendedUse.tbd1,
-                controller: useController,
-                dropdownMenuEntries: useEntries,
-                onSelected: (IntendedUse? use) {
+                initialSelection: ConnectionType.cell,
+                controller: typeController,
+                dropdownMenuEntries: typeEntries,
+                onSelected: (ConnectionType? type) {
                   setState(() {
-                    selectedUse = use;
+                    selectedType = type;
                   });
                 }
-              ),
             ),
-            const Padding(padding: EdgeInsets.all(16.0)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ElevatedButton(
-                style: style,
-                //TODO: pass typeController.text and useController.text via onPressed
-                onPressed: () => print('${typeController.text} + ${useController.text}'),
-                child: const Text('Begin Secure Configuration'),
-              ),
+          ),
+
+          // Intended Use Dropdown
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
+            child: Text('Intended Use',
+              style: Theme.of(context).textTheme.titleLarge),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+            child: DropdownMenu<IntendedUse>(
+              width: 250.0,
+              initialSelection: IntendedUse.tbd1,
+              controller: useController,
+              dropdownMenuEntries: useEntries,
+              onSelected: (IntendedUse? use) {
+                setState(() {
+                  selectedUse = use;
+                });
+              }
             ),
-          ],
-        ),
+          ),
+
+          // "Begin" Button
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
+            child: ElevatedButton(
+              style: style,
+              //TODO: pass typeController.text and useController.text via onPressed
+              onPressed: () => print('${typeController.text} + ${useController.text}'),
+              child: const Text('Begin Secure Configuration'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-
+//this will change based on the api call
 enum ConnectionType {
   cell('Cellular'),
   wired('Hardwired'),
@@ -118,6 +120,7 @@ enum ConnectionType {
   final String label;
 }
 
+//this will change based on the api call
 enum IntendedUse {
   tbd1('TBD'),
   tbd2('TBD2'),
