@@ -4,6 +4,9 @@ import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
+import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
+
 final LoginInfo _loginInfo = LoginInfo();
 final ZoomInfo _zoomInfo = ZoomInfo();
 
@@ -23,6 +26,10 @@ class AppProviders extends StatelessWidget {
                 create: (_) => _zoomInfo),
             ChangeNotifierProvider(
                 create: (_) => _loginInfo),
+            ChangeNotifierProvider(
+                create: (_) => ButtonEnabler()),
+            ChangeNotifierProvider(
+                create:(_) => IssueCheckboxList()),
           ],
         child: MyApp(),
       );
