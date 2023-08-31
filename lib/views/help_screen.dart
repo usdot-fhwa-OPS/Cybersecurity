@@ -91,7 +91,7 @@ class CheckboxWidgetState extends State {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
         child: Column(
           children: List.generate(
            context.watch<IssueCheckboxList>().numOfFields,

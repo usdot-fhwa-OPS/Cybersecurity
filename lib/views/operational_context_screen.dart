@@ -48,43 +48,58 @@ class _OpContextScreenState extends State<OpContextScreen> {
       ),
       body: ListView(
           children: <Widget>[
-            const Padding(padding: EdgeInsets.all(8)),
-            Text('Connection Type',
+            const Padding(padding: EdgeInsets.all(16)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('Connection Type',
                 style: Theme.of(context).textTheme.titleLarge),
+            ),
             const Padding(padding: EdgeInsets.all(4)),
             // Connection Type Dropdown
-            DropdownMenu<ConnectionType>(
-              width: 250.0,
-              initialSelection: ConnectionType.cell,
-              controller: typeController,
-              dropdownMenuEntries: typeEntries,
-              onSelected: (ConnectionType? type) {
-                setState(() {
-                  selectedType = type;
-                });
-              }
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: DropdownMenu<ConnectionType>(
+                  width: 250.0,
+                  initialSelection: ConnectionType.cell,
+                  controller: typeController,
+                  dropdownMenuEntries: typeEntries,
+                  onSelected: (ConnectionType? type) {
+                    setState(() {
+                      selectedType = type;
+                    });
+                  }
+              ),
             ),
-            const Padding(padding: EdgeInsets.all(8)),
-            Text('Intended Use',
+            const Padding(padding: EdgeInsets.all(16.0)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('Intended Use',
                 style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-            DropdownMenu<IntendedUse>(
-              width: 250.0,
-              initialSelection: IntendedUse.tbd1,
-              controller: useController,
-              dropdownMenuEntries: useEntries,
-              onSelected: (IntendedUse? use) {
-                setState(() {
-                  selectedUse = use;
-                });
-              }
             ),
-            const Padding(padding: EdgeInsets.all(8)),
-            ElevatedButton(
-              style: style,
-              //TODO: pass typeController.text and useController.text via onPressed
-              onPressed: () => print('${typeController.text} + ${useController.text}'),
-              child: const Text('Begin Secure Configuration'),
+            const Padding(padding: EdgeInsets.all(4)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: DropdownMenu<IntendedUse>(
+                width: 250.0,
+                initialSelection: IntendedUse.tbd1,
+                controller: useController,
+                dropdownMenuEntries: useEntries,
+                onSelected: (IntendedUse? use) {
+                  setState(() {
+                    selectedUse = use;
+                  });
+                }
+              ),
+            ),
+            const Padding(padding: EdgeInsets.all(16.0)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                style: style,
+                //TODO: pass typeController.text and useController.text via onPressed
+                onPressed: () => print('${typeController.text} + ${useController.text}'),
+                child: const Text('Begin Secure Configuration'),
+              ),
             ),
           ],
         ),
