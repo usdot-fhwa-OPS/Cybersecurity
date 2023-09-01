@@ -59,13 +59,6 @@ final goRouter = GoRouter(
                         )
                       ]
                 ),
-                GoRoute(
-                  path: 'settings',
-                  pageBuilder: (context, state) => NoTransitionPage(
-                  child: SettingsScreen(label: 'Settings'),
-              ),
-            ),
-                
               ],
             ),
           ],
@@ -89,9 +82,9 @@ final goRouter = GoRouter(
           routes: [
             // top route inside branch
             GoRoute(
-              path: '/OpContext',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: OpContextScreen(label: 'Operational Context'),
+                  path: '/Settings',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                  child: SettingsScreen(label: 'Settings'),
               ),
             ),
           ],
