@@ -46,6 +46,18 @@ final goRouter = GoRouter(
                   path: 'details',
                   builder: (context, state) =>
                       const DetailsScreen(label: 'Select Vendor and Model'),
+                      routes: [
+                        GoRoute(
+                          name: 'opcontext',
+                          path: 'opcontext/:vendor/:deviceType/:model',
+                          builder: (context, state) => OpContextScreen(
+                            label: "label",
+                            vendor: state.pathParameters['vendor'],
+                            deviceType: state.pathParameters['deviceType'],
+                            model: state.pathParameters['model'],
+                          )
+                        )
+                      ]
                 ),
                 GoRoute(
                   path: 'settings',

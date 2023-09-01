@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 //TODO -- Refactor with Provider
 class OpContextScreen extends StatefulWidget {
-  const OpContextScreen({required this.label, Key? key})
+  const OpContextScreen({required this.label, this.vendor,
+  this.deviceType, this.model, Key? key})
     : super(key: key);
 
     /// The label
   final String label;
+  final String? vendor;
+  final String? deviceType;
+  final String? model;
 
   @override
   State<OpContextScreen> createState() => _OpContextScreenState();
@@ -41,7 +45,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.label),
+        title: Text(widget.model!),
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
