@@ -21,17 +21,17 @@ class DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController deviceController = TextEditingController();
   final TextEditingController modelController = TextEditingController();
 
-  Vendor? selectedVendor;
+  String? selectedVendor;
   DeviceType? selectedType;  
   Model? selectedModel;
 
   @override
   Widget build(BuildContext context) {
 
-    final List<DropdownMenuEntry<Vendor>> vendorEntries = 
-            <DropdownMenuEntry<Vendor>>[];
-    for (final Vendor type in Vendor.values) {
-      vendorEntries.add(DropdownMenuEntry<Vendor>(value: type, label: type.label));
+    final List<DropdownMenuEntry<String>> vendorEntries = 
+            <DropdownMenuEntry<String>>[];
+    for (final type in vendorList) {
+      vendorEntries.add(DropdownMenuEntry<String>(value: type, label: type));
     }
 
     final List<DropdownMenuEntry<DeviceType>> typeEntries = 
@@ -70,12 +70,12 @@ class DetailsScreenState extends State<DetailsScreen> {
 
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<Vendor>(
+            child: DropdownMenu<String>(
                 width: 250.0,
-                initialSelection: Vendor.vendor1,
+                initialSelection: vendorList[0],
                 controller: vendorController,
                 dropdownMenuEntries: vendorEntries,
-                onSelected: (Vendor? vendor) {
+                onSelected: (String? vendor) {
                   setState(() {
                     selectedVendor = vendor;
                   });
@@ -145,16 +145,9 @@ class DetailsScreenState extends State<DetailsScreen> {
   }
 }
 
-//this will change based on the api call
-enum Vendor {
-  vendor1('Vendor 1'),
-  vendor2('Vendor 2'),
-  vendor3('Vendor 3'),
-  vendor4('Vendor 4');
-
-  const Vendor(this.label);
-  final String label;
-}
+final List<String> vendorList = [
+  'Vendor 1', 'Vendor 2', 'Vendor 3', 'Vendor 4'
+];
 
 //this will change based on the api call
 enum DeviceType {
