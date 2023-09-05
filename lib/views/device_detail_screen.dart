@@ -1,3 +1,4 @@
+import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,31 +23,11 @@ class DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController modelController = TextEditingController();
 
   String? selectedVendor;
-  DeviceType? selectedType;  
-  Model? selectedModel;
+  String? selectedType;  
+  String? selectedModel;
 
   @override
   Widget build(BuildContext context) {
-
-    final List<DropdownMenuEntry<String>> vendorEntries = 
-            <DropdownMenuEntry<String>>[];
-    for (final type in vendorList) {
-      vendorEntries.add(DropdownMenuEntry<String>(value: type, label: type));
-    }
-
-    final List<DropdownMenuEntry<DeviceType>> typeEntries = 
-            <DropdownMenuEntry<DeviceType>>[];
-    for (final DeviceType type in DeviceType.values) {
-      typeEntries.add(DropdownMenuEntry<DeviceType>(value: type, label: type.label));
-    }
-
-   
-    final List<DropdownMenuEntry<Model>> modelEntries = 
-            <DropdownMenuEntry<Model>>[];
-    for (final Model use in Model.values) {
-      modelEntries.add(DropdownMenuEntry<Model>(value: use, label: use.label));
-    }
-
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
@@ -60,81 +41,15 @@ class DetailsScreenState extends State<DetailsScreen> {
       ),
       body: ListView(
         children: <Widget>[
-
-          // Connection Type Dropdown
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Vendor',
-              style: Theme.of(context).textTheme.titleLarge),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<String>(
-                width: 250.0,
-                initialSelection: vendorList[0],
-                controller: vendorController,
-                dropdownMenuEntries: vendorEntries,
-                onSelected: (String? vendor) {
-                  setState(() {
-                    selectedVendor = vendor;
-                  });
-                }
-            ),
-          ),
-
-          // Intended Use Dropdown
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Device Type',
-              style: Theme.of(context).textTheme.titleLarge),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<DeviceType>(
-              width: 250.0,
-              initialSelection: DeviceType.device1,
-              controller: deviceController,
-              dropdownMenuEntries: typeEntries,
-              onSelected: (DeviceType? type) {
-                setState(() {
-                  selectedType
-               = type;
-                });
-              }
-            ),
-          ),
-
-          // Intended Use Dropdown
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Model',
-              style: Theme.of(context).textTheme.titleLarge),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<Model>(
-              width: 250.0,
-              initialSelection: Model.model1,
-              controller: modelController,
-              dropdownMenuEntries: modelEntries,
-              onSelected: (Model? use) {
-                setState(() {
-                  selectedModel
-               = use;
-                });
-              }
-            ),
-          ),
+          DeviceDropdown(dropdownLabel: 'Vendor', dropdownList: vendorList, dropdownController: vendorController, selectedItem: selectedVendor),
+          DeviceDropdown(dropdownLabel: 'Device Type', dropdownList: deviceList, dropdownController: deviceController, selectedItem: selectedType),
+          DeviceDropdown(dropdownLabel: 'Model', dropdownList: modelList, dropdownController: modelController, selectedItem: selectedModel),
 
           // "Begin" Button
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
             child: ElevatedButton(
               style: style,
-              //TODO: pass deviceController.text and modelController.text via onPressed
               onPressed: () => context.goNamed('opcontext', pathParameters: {'vendor': vendorController.text, 'deviceType': deviceController.text, 'model': modelController.text}),
               child: const Text('Next Step'),
             ),
@@ -149,23 +64,10 @@ final List<String> vendorList = [
   'Vendor 1', 'Vendor 2', 'Vendor 3', 'Vendor 4'
 ];
 
-//this will change based on the api call
-enum DeviceType {
-  device1('Device 1'),
-  device2('Device 2'),
-  device3('Device 3'),
-  device4('Device 4');
+final List<String> deviceList = [
+  'Device 1', 'Device 2', 'Device 3', 'Device 4',
+];
 
-  const DeviceType(this.label);
-  final String label;
-}
-
-enum Model {
-  model1('Model 1'),
-  model2('Model 2'),
-  model3('Model 3'),
-  model4('Model 4');
-
-  const Model(this.label);
-  final String label;
-}
+final List<String> modelList = [
+  'Model 1', 'Model 2', 'Model 3', 'Model 4'
+];
