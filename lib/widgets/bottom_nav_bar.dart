@@ -42,7 +42,7 @@ class BottomNavBar extends StatelessWidget {
                 size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),)),
           NavigationDestination(
               label: 'Settings',
-              icon: Icon(Icons.account_circle,
+              icon: Icon(Icons.settings,
                 size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),))
         ],
         onDestinationSelected: _goBranch,

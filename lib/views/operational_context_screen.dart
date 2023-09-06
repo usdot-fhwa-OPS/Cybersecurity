@@ -42,9 +42,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
         children: <Widget>[
           DeviceDropdown(dropdownLabel: 'Connection Type', dropdownList: connectionList, dropdownController: typeController, selectedItem: selectedType),
           DeviceDropdown(dropdownLabel: 'Intended Use', dropdownList: intendedUseList, dropdownController: useController, selectedItem: selectedUse),
-         
-
-          // "Begin" Button
+      
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
             child: ElevatedButton(
