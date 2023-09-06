@@ -1,3 +1,4 @@
+import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 
 //TODO -- Refactor with Provider
@@ -20,25 +21,11 @@ class _OpContextScreenState extends State<OpContextScreen> {
   final TextEditingController typeController = TextEditingController();
   final TextEditingController useController = TextEditingController();
 
-  ConnectionType? selectedType;  
-  IntendedUse? selectedUse;
+  String? selectedType;  
+  String? selectedUse;
 
   @override
   Widget build(BuildContext context) {
-
-    //Connection Type Dropdown
-    final List<DropdownMenuEntry<ConnectionType>> typeEntries = 
-            <DropdownMenuEntry<ConnectionType>>[];
-    for (final ConnectionType type in ConnectionType.values) {
-      typeEntries.add(DropdownMenuEntry<ConnectionType>(value: type, label: type.label));
-    }
-
-    //Intended Use Dropdown
-    final List<DropdownMenuEntry<IntendedUse>> useEntries = 
-            <DropdownMenuEntry<IntendedUse>>[];
-    for (final IntendedUse use in IntendedUse.values) {
-      useEntries.add(DropdownMenuEntry<IntendedUse>(value: use, label: use.label));
-    }
 
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
@@ -53,49 +40,9 @@ class _OpContextScreenState extends State<OpContextScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          // Connection Type Dropdown
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Connection Type',
-              style: Theme.of(context).textTheme.titleLarge),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<ConnectionType>(
-                width: 250.0,
-                initialSelection: ConnectionType.cell,
-                controller: typeController,
-                dropdownMenuEntries: typeEntries,
-                onSelected: (ConnectionType? type) {
-                  setState(() {
-                    selectedType = type;
-                  });
-                }
-            ),
-          ),
-
-          // Intended Use Dropdown
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Intended Use',
-              style: Theme.of(context).textTheme.titleLarge),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-            child: DropdownMenu<IntendedUse>(
-              width: 250.0,
-              initialSelection: IntendedUse.tbd1,
-              controller: useController,
-              dropdownMenuEntries: useEntries,
-              onSelected: (IntendedUse? use) {
-                setState(() {
-                  selectedUse = use;
-                });
-              }
-            ),
-          ),
+          DeviceDropdown(dropdownLabel: 'Connection Type', dropdownList: connectionList, dropdownController: typeController, selectedItem: selectedType),
+          DeviceDropdown(dropdownLabel: 'Intended Use', dropdownList: intendedUseList, dropdownController: useController, selectedItem: selectedUse),
+         
 
           // "Begin" Button
           Padding(
@@ -113,24 +60,10 @@ class _OpContextScreenState extends State<OpContextScreen> {
   }
 }
 
-//this will change based on the api call
-enum ConnectionType {
-  cell('Cellular'),
-  wired('Hardwired'),
-  wifi('Wifi'),
-  sat('Satellite');
+final List<String> connectionList = [
+  'Cellular', 'Hardwired', 'Wifi', 'Satellite'
+];
 
-  const ConnectionType(this.label);
-  final String label;
-}
-
-//this will change based on the api call
-enum IntendedUse {
-  tbd1('TBD'),
-  tbd2('TBD2'),
-  tbd3('TBD3'),
-  tbd4('TBD4');
-
-  const IntendedUse(this.label);
-  final String label;
-}
+final List<String> intendedUseList = [
+  'TBD','TBD 2','TBD 3', 'TBD 4'
+];
