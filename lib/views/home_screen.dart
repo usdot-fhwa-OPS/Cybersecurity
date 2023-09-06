@@ -43,15 +43,6 @@ class HomeScreen extends StatelessWidget {
         title: Text(label),
         centerTitle: true,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => context.go(settingsPath),
-        //       icon: Icon(Icons.settings,
-        //         size: (22 * Provider
-        //             .of<ZoomInfo>(context)
-        //             .zoomLevel),),
-        //   )
-        // ],
       ),
       body: Column(
         children: [

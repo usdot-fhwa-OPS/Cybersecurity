@@ -47,7 +47,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
             padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
             child: ElevatedButton(
               style: style,
-              //TODO: pass typeController.text and useController.text via onPressed
+              //TODO: pass typeController.text and useController.text via onPressed to the Security Configurations page
               onPressed: () => print('${typeController.text} + ${useController.text}'),
               child: const Text('Begin Secure Configuration'),
             ),
