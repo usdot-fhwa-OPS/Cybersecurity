@@ -32,7 +32,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vendor!),
+        title: const Text("Operational Context"),
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
