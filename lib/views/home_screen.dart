@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemAsString: (Device u) => u.deviceAsString(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
-                  hintText: "  Search",
+                  hintText: "Search",
                   border: OutlineInputBorder(),
                 ),
               ),
