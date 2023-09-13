@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "411263361577",
+    "project_id": "cybersecurity-its-app",
+    "storage_bucket": "cybersecurity-its-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411263361577:android:cfc8846087bb64207bf238",
+        "android_client_info": {
+          "package_name": "com.example.cybersecurity_its_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9dgsSxJjs_wMF1nEXCfxANCbmaLnBULs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
