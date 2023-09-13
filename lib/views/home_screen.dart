@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'dart:convert';
 
 import '../utils/zoom_info.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   /// Creates a HomeScreen
-  HomeScreen({required this.label, required this.detailsPath, required this.settingsPath, Key? key})
+  const HomeScreen({required this.label, required this.detailsPath, required this.settingsPath, Key? key})
       : super(key: key);
 
   /// The label
@@ -19,7 +21,33 @@ class HomeScreen extends StatelessWidget {
 
   final String settingsPath;
 
-  final List<String> categories = ["ITS Field Devices","Center to Field Communications","Centralized LAN Equipment", "Other Equipment"];
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<String> demoJsons = [
+    "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
+    "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
+    "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
+    "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
+    "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
+    "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}"
+   ];
+  List<Device> devices = [];
+  Set<String> categories = <String>{};
+
+  @override
+  void initState() {
+    for (String json in demoJsons){
+      Map<String, dynamic> decodedJSON = jsonDecode(json);
+      Device device = Device.fromJson(decodedJSON["device"]);
+      categories.add(device.category);
+      devices.add(device);
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +68,32 @@ class HomeScreen extends StatelessWidget {
         ),
         leadingWidth: 50,
 
-        title: Text(label),
+        title: Text(widget.label),
         centerTitle: true,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: TextField(        
-              decoration: InputDecoration(
-              labelText: 'Search',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius:
-                  BorderRadius.all(Radius.circular(5.0)),
+          Padding(
+            padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
+            child: DropdownSearch<Device>(
+              items: devices,
+              itemAsString: (Device u) => u.deviceAsString(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  hintText: "  Search",
+                  border: OutlineInputBorder(),
                 ),
+              ),
+              dropdownButtonProps: const DropdownButtonProps(
+                icon: Icon(Icons.search),
+              ),
+              onChanged: (Device? d) => context.go('/Home/details'),
+              popupProps: 
+              const PopupProps.dialog(
+                showSearchBox: true,
+                fit: FlexFit.loose,
+                searchFieldProps: TextFieldProps(autofocus: true)
               ),
             ),
           ),
@@ -64,7 +102,7 @@ class HomeScreen extends StatelessWidget {
               ListView.builder(
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
-                  return Category(label: categories[index]);
+                  return Category(label: categories.elementAt(index), devices: devices.where((device) => device.category == categories.elementAt(index)).toList());
                 }
               )
             ),
@@ -74,17 +112,16 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+
+
 class Category extends StatelessWidget {
   /// Creates a HelpScreen
-  Category({required this.label, Key? key})
+  const Category({required this.label, required this.devices, Key? key})
       : super(key: key);
 
   /// The label
   final String label;
-
-  final List<String> devices = ["Device 1", "Device 2","Device 3","Device 4"];
-  final List<String> descriptions = ["Description 1", "Description 2","Description 3","Description 4"];
-  final List<String> images = ['assets/demo1.png', 'assets/demo2.png','assets/demo3.png', 'assets/demo4.png', 'assets/demo5.png', 'assets/demo6.png'];
+  final List<Device> devices;
 
     @override
   Widget build(BuildContext context) {
@@ -126,8 +163,7 @@ class Category extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: devices.length,
                 itemBuilder: (context, index) {
-                  //TODO replace Random image with image at index once backend integrated
-                  return Device(label: devices[index], description: descriptions[index], image: images[Random().nextInt(images.length)]);
+                  return DeviceCard(label: devices[index].deviceAsString(), description: devices[index].description, image: devices[index].imageUrl);
                 }
               ),
             ),
@@ -138,9 +174,9 @@ class Category extends StatelessWidget {
   }
 }
 
-class Device extends StatelessWidget {
+class DeviceCard extends StatelessWidget {
   /// Creates a HelpScreen
-  const Device({required this.label, required this.description, required this.image, Key? key})
+  const DeviceCard({required this.label, required this.description, required this.image, Key? key})
       : super(key: key);
 
   /// The label
@@ -170,9 +206,10 @@ class Device extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: 
-                Image.asset(image,
-                    fit: BoxFit.cover,
-                  )
+                Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                )
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
@@ -193,5 +230,29 @@ class Device extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Device {
+  final String vendor;
+  final String category;
+  final String model;
+  final String imageUrl;
+  final String description;
+
+  Device({ required this.vendor, required this.category, required this.model, required this.imageUrl, required this.description});
+
+  factory Device.fromJson(Map<String, dynamic> json) {
+    return Device(
+      vendor: json["vendor"],
+      category: json["category"],
+      model: json["model"],
+      imageUrl: json["imageUrl"],
+      description: json["description"],
+    );
+  }
+
+  String deviceAsString(){
+    return '$vendor $model';
   }
 }
