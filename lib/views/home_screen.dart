@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
    ];
   List<Device> devices = [];
   Set<String> categories = <String>{};
+  final _userEditTextController = TextEditingController();
 
   @override
   void initState() {
@@ -83,17 +84,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 dropdownSearchDecoration: InputDecoration(
                   hintText: "Search",
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search)
                 ),
               ),
               dropdownButtonProps: const DropdownButtonProps(
-                icon: Icon(Icons.search),
+                icon: Icon(null),
               ),
               onChanged: (Device? d) => context.go('/Home/details'),
-              popupProps: 
-              const PopupProps.dialog(
+              popupProps: PopupProps.dialog(
+                itemBuilder: (context, item, isSelected) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: .5, color: Colors.grey),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
+                      child: Row(
+                        children: [
+                          Text(item.deviceAsString()), 
+                          const Spacer(),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
+                          
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 showSearchBox: true,
                 fit: FlexFit.loose,
-                searchFieldProps: TextFieldProps(autofocus: true)
+                searchFieldProps: TextFieldProps(
+                  controller: _userEditTextController,         
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: "Search",
+                    prefixIcon: GestureDetector(
+                      onTap: () => Navigator.pop(context, true),
+                      child: const Icon(Icons.arrow_back)
+                    ),
+                    suffixIcon:
+                    GestureDetector(
+                      onTap: () => _userEditTextController.clear(),
+                      child: const Icon(Icons.cancel, color: Colors.black12)
+                    ),
+                    border: const OutlineInputBorder()
+                  ),
+                ),
               ),
             ),
           ),
@@ -135,7 +172,7 @@ class Category extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.black),
+                    bottom: BorderSide(width: 1.0, color: Colors.black54),
                 ),
               ),
               child: Padding(
@@ -149,7 +186,7 @@ class Category extends StatelessWidget {
                           style: const TextStyle(fontSize: 17)
                         )
                       ), 
-                    const Icon(Icons.arrow_forward),
+                    const Icon(Icons.arrow_forward, color: Colors.black54),
                   ],
                 ),
               ),
