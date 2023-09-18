@@ -71,7 +71,8 @@ class HelpScreenState extends State<HelpScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
                               "Error: Please include a description of your issue."),
-                          backgroundColor: Colors.red));
+                          backgroundColor: Color(0xFFD50000),
+                          behavior: SnackBarBehavior.floating,));
                       return;
                     } else {
                       String message;
@@ -87,14 +88,17 @@ class HelpScreenState extends State<HelpScreen> {
                         });
 
                         message = 'Success: Your issue was recieved successfully.';
+                        ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(message),
+                          backgroundColor: const Color(0xFF00C853),
+                          behavior: SnackBarBehavior.floating,));
                       } catch (e) {
                         message = 'Error: Your issue has not been sent.';
-                      }
-
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context)
+                        ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(message),
-                          backgroundColor: Colors.green,));
+                          backgroundColor: const Color(0xFFD50000),
+                          behavior: SnackBarBehavior.floating,));
+                      }
                     }
                   },
                   child: const Text('Submit'),
