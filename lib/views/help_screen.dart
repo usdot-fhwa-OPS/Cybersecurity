@@ -2,6 +2,7 @@ import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({required this.label, Key? key})
@@ -16,7 +17,6 @@ class HelpScreen extends StatefulWidget {
 class HelpScreenState extends State<HelpScreen> {
   final TextEditingController textController = TextEditingController();
   final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +66,37 @@ class HelpScreenState extends State<HelpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
-                  //TODO: POST below and textController.text when server is set up
-                  onPressed: context.watch<ButtonEnabler>().isEnabled ? () => print('checkbox val: ${Provider.of<IssueCheckboxList>(context, listen: false).currentValue}, textbox val: ${textController.text}') : () => tooltipkey.currentState?.ensureTooltipVisible(),
+                  onPressed: () async {
+                    if (!Provider.of<ButtonEnabler>(context, listen: false).isEnabled) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              "Error: Please include a description of your issue."),
+                          backgroundColor: Colors.red));
+                      return;
+                    } else {
+                      String message;
+                      try{
+                        final db = FirebaseFirestore.instance.collection('issues');
+
+                        await db.doc().set({
+                          "issueDetails": textController.text,
+                          "issueType": Provider.of<IssueCheckboxList>(context, listen: false).currentValue,
+                          "timestamp": DateTime.timestamp(),
+                          "userEmail": "test1@gmail.com",
+                          "userName": "Test User",
+                        });
+
+                        message = 'Success: Your issue was recieved successfully.';
+                      } catch (e) {
+                        message = 'Error: Your issue has not been sent.';
+                      }
+
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(message),
+                          backgroundColor: Colors.green,));
+                    }
+                  },
                   child: const Text('Submit'),
                 ),
               )
