@@ -57,12 +57,7 @@ class HelpScreenState extends State<HelpScreen> {
                 }
               )
             ),
-            Tooltip(
-              message: 'Error: Please include a description of your issue.',
-              key: tooltipkey,
-              triggerMode: TooltipTriggerMode.manual,
-              showDuration: const Duration(seconds: 1),
-              child: Padding (
+            Padding (
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
@@ -104,7 +99,6 @@ class HelpScreenState extends State<HelpScreen> {
                   child: const Text('Submit'),
                 ),
               )
-            ),
           ]
         ),
       )
