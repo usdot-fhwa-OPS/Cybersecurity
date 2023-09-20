@@ -6,7 +6,7 @@ import 'package:cybersecurity_its_app/utils/login_info.dart';
 
 class SettingsScreen extends StatelessWidget {
   /// Creates a SettingsScreen
-  SettingsScreen({required this.label, Key? key}) : super(key: key);
+  const SettingsScreen({required this.label, Key? key}) : super(key: key);
 
   /// The label
   final String label;
@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
           size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),
         ),
         backgroundColor: Colors.white,
-        titleTextStyle: TextStyle(fontSize: 16, color: Colors.black),
+        titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
         centerTitle: true,
       ),
       body: Center(
