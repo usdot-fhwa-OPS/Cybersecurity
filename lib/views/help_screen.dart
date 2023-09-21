@@ -106,6 +106,19 @@ class HelpScreenState extends State<HelpScreen> {
   }
 }
 
+class IssueSnackBar extends StatelessWidget {
+  const IssueSnackBar({required this.label, required this.snackColor, Key? key})
+  : super(key: key);
+
+  final String label;
+  final Color snackColor; 
+
+  @override
+  Widget build(BuildContext context) {
+    return
+  }
+}
+
 class CheckboxWidget extends StatefulWidget {
   const CheckboxWidget({super.key});
 
