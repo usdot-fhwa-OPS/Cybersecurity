@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({required this.label, Key? key})
@@ -16,6 +20,29 @@ class HelpScreen extends StatefulWidget {
 class HelpScreenState extends State<HelpScreen> {
   final TextEditingController textController = TextEditingController();
   final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
+
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+
+  @override
+  void initState() {
+    getConnectivity();
+    super.initState();
+  }
+
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+        },
+      );
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +107,13 @@ class HelpScreenState extends State<HelpScreen> {
       return;
     } else {
       try {
-        final db = FirebaseFirestore.instance.collection('issues');
-        ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Success: Your issue was recieved successfully.'),
-          backgroundColor: Color(0xFF00C853),
+        if (!isDeviceConnected) {
+          ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Warning: Connection unavailable. Your issue will be sent upon reconnection'),
           behavior: SnackBarBehavior.floating,));
-        
+        } 
+
+        final db = FirebaseFirestore.instance.collection('issues');
         context.read<ButtonEnabler>().disable();
 
         await db.doc().set({
@@ -95,6 +123,11 @@ class HelpScreenState extends State<HelpScreen> {
           "userEmail": "test1@gmail.com",
           "userName": "Test User",
         });
+
+        ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Success: Your issue was recieved successfully.'),
+          backgroundColor: Color(0xFF00C853),
+          behavior: SnackBarBehavior.floating,));
 
         textController.clear();
         textController.text.isEmpty;
