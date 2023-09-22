@@ -8,7 +8,6 @@ class HelpScreen extends StatefulWidget {
   const HelpScreen({required this.label, Key? key})
       : super(key: key);
 
-  /// The label
   final String label;
   
   @override
@@ -61,41 +60,7 @@ class HelpScreenState extends State<HelpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 child: ElevatedButton(
                   style: style,
-                  onPressed: () async {
-                    if (!Provider.of<ButtonEnabler>(context, listen: false).isEnabled) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              "Error: Please include a description of your issue."),
-                          backgroundColor: Color(0xFFD50000),
-                          behavior: SnackBarBehavior.floating,));
-                      return;
-                    } else {
-                      String message;
-                      try{
-                        final db = FirebaseFirestore.instance.collection('issues');
-
-                        await db.doc().set({
-                          "issueDetails": textController.text,
-                          "issueType": Provider.of<IssueCheckboxList>(context, listen: false).currentValue,
-                          "timestamp": DateTime.timestamp(),
-                          "userEmail": "test1@gmail.com",
-                          "userName": "Test User",
-                        });
-
-                        message = 'Success: Your issue was recieved successfully.';
-                        ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(message),
-                          backgroundColor: const Color(0xFF00C853),
-                          behavior: SnackBarBehavior.floating,));
-                      } catch (e) {
-                        message = 'Error: Your issue has not been sent.';
-                        ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(message),
-                          backgroundColor: const Color(0xFFD50000),
-                          behavior: SnackBarBehavior.floating,));
-                      }
-                    }
-                  },
+                  onPressed: () => sendIssue(),
                   child: const Text('Submit'),
                 ),
               )
@@ -104,18 +69,45 @@ class HelpScreenState extends State<HelpScreen> {
       )
     );
   }
-}
 
-class IssueSnackBar extends StatelessWidget {
-  const IssueSnackBar({required this.label, required this.snackColor, Key? key})
-  : super(key: key);
+  void sendIssue() async {
+    if (!Provider.of<ButtonEnabler>(context, listen: false).isEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              "Error: Please include a description of your issue."),
+          backgroundColor: Color(0xFFD50000),
+          behavior: SnackBarBehavior.floating,));
+      return;
+    } else {
+      try {
+        final db = FirebaseFirestore.instance.collection('issues');
 
-  final String label;
-  final Color snackColor; 
+        await db.doc().set({
+          "issueDetails": textController.text,
+          "issueType": Provider.of<IssueCheckboxList>(context, listen: false).currentValue,
+          "timestamp": DateTime.timestamp(),
+          "userEmail": "test1@gmail.com",
+          "userName": "Test User",
+        });
 
-  @override
-  Widget build(BuildContext context) {
-    return
+        ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Success: Your issue was recieved successfully.'),
+          backgroundColor: Color(0xFF00C853),
+          behavior: SnackBarBehavior.floating,));
+        
+        textController.clear();
+        if (textController.text.isEmpty) {
+          context.read<ButtonEnabler>().disable();
+        } else {
+          context.read<ButtonEnabler>().enable();
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Error: Unable to send your issue at this time. Try again later.'),
+          backgroundColor: Color(0xFFD50000),
+          behavior: SnackBarBehavior.floating,));
+      }
+    }
   }
 }
 
