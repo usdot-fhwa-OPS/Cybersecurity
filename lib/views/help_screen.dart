@@ -81,6 +81,12 @@ class HelpScreenState extends State<HelpScreen> {
     } else {
       try {
         final db = FirebaseFirestore.instance.collection('issues');
+        ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Success: Your issue was recieved successfully.'),
+          backgroundColor: Color(0xFF00C853),
+          behavior: SnackBarBehavior.floating,));
+        
+        context.read<ButtonEnabler>().disable();
 
         await db.doc().set({
           "issueDetails": textController.text,
@@ -90,17 +96,8 @@ class HelpScreenState extends State<HelpScreen> {
           "userName": "Test User",
         });
 
-        ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Success: Your issue was recieved successfully.'),
-          backgroundColor: Color(0xFF00C853),
-          behavior: SnackBarBehavior.floating,));
-        
         textController.clear();
-        if (textController.text.isEmpty) {
-          context.read<ButtonEnabler>().disable();
-        } else {
-          context.read<ButtonEnabler>().enable();
-        }
+        textController.text.isEmpty;
       } catch (e) {
         ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Error: Unable to send your issue at this time. Try again later.'),
