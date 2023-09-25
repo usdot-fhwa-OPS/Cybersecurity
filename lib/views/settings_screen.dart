@@ -40,6 +40,10 @@ class SettingsScreen extends StatelessWidget {
                 ZoomLevelAdjustment(),
               ],
             ),
+            TextButton(
+              onPressed: () => throw Exception(),
+              child: const Text("Throw Test Exception"),
+            ),
             Expanded(
                 child: Align(
                     alignment: FractionalOffset.bottomCenter,

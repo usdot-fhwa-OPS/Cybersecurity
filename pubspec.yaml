@@ -44,6 +44,7 @@ dependencies:
   cloud_firestore: ^4.9.1
   connectivity_plus: ^4.0.2
   internet_connection_checker: ^1.0.0+1
+  firebase_crashlytics: ^3.3.6
 
 flutter_native_splash:
   android: true

@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
@@ -15,6 +18,15 @@ final ZoomInfo _zoomInfo = ZoomInfo();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   runApp(const AppProviders());
 }
 
