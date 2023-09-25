@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +46,24 @@ class SettingsScreen extends StatelessWidget {
             TextButton(
               onPressed: () => throw Exception(),
               child: const Text("Throw Test Exception"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(
+                  content: Text('App will crash is 5 seconds \n'
+                      'Please reopen to send data to Crashlytics'),
+                  duration: Duration(seconds: 5),
+                ));
+
+                // Delay crash for 5 seconds
+                sleep(const Duration(seconds: 5));
+
+                // Use FirebaseCrashlytics to throw an error. Use this for
+                // confirmation that errors are being correctly reported.
+                FirebaseCrashlytics.instance.crash();
+              },
+              child: const Text('Crash'),
             ),
             Expanded(
                 child: Align(
