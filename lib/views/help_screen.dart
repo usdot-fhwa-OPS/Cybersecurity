@@ -97,7 +97,7 @@ class HelpScreenState extends State<HelpScreen> {
     );
   }
 
-  void sendIssue() async {
+ Future<void> sendIssue() async {
     if (!Provider.of<ButtonEnabler>(context, listen: false).isEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -116,7 +116,7 @@ class HelpScreenState extends State<HelpScreen> {
         final db = FirebaseFirestore.instance.collection('issues');
         context.read<ButtonEnabler>().disable();
 
-        await db.doc().set({
+        await db.add({
           "issueDetails": textController.text,
           "issueType": Provider.of<IssueCheckboxList>(context, listen: false).currentValue,
           "timestamp": DateTime.timestamp(),
