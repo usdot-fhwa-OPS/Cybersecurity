@@ -1,8 +1,13 @@
+import 'dart:ui';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
@@ -10,7 +15,18 @@ import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 final LoginInfo _loginInfo = LoginInfo();
 final ZoomInfo _zoomInfo = ZoomInfo();
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   runApp(const AppProviders());
 }
 
@@ -36,6 +52,7 @@ class AppProviders extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
+  
   MyApp({super.key});
 
   bool runOnce = true;
@@ -73,3 +90,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

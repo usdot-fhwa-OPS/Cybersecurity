@@ -8,7 +8,7 @@ class IssueCheckboxList with ChangeNotifier {
     "Other": false,
   };
 
-  String _currentValue = '';
+  String _currentValue = 'Missing Field Device';
 
   int get numOfFields => _fields.length;
 
