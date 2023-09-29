@@ -113,9 +113,9 @@ class HelpScreenState extends State<HelpScreen> {
           behavior: SnackBarBehavior.floating,));
         } 
 
-        final db = FirebaseFirestore.instance.collection('issues');
         context.read<ButtonEnabler>().disable();
-
+        
+        final db = FirebaseFirestore.instance.collection('issues');
         await db.add({
           "issueDetails": textController.text,
           "issueType": Provider.of<IssueCheckboxList>(context, listen: false).currentValue,
@@ -130,7 +130,6 @@ class HelpScreenState extends State<HelpScreen> {
           behavior: SnackBarBehavior.floating,));
 
         textController.clear();
-        textController.text.isEmpty;
       } catch (e) {
         ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Error: Unable to send your issue at this time. Try again later.'),
