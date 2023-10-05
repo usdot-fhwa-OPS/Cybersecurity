@@ -43,10 +43,14 @@ class SettingsScreen extends StatelessWidget {
                 ZoomLevelAdjustment(),
               ],
             ),
+
+            // Button for testing a fatal error
             TextButton(
               onPressed: () => throw Exception(),
               child: const Text("Throw Test Exception"),
             ),
+
+            // Button for testing a fatal error
             ElevatedButton(
               onPressed: () async {
                 ScaffoldMessenger.of(context)

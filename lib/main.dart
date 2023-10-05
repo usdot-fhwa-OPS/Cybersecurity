@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -18,6 +19,8 @@ final ZoomInfo _zoomInfo = ZoomInfo();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+
+  // Catches all fatal errors and non-fatal then sends them to Crashlytics.
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
   };
@@ -26,6 +29,15 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+  // Catches errors that happen outside of Flutter context
+  Isolate.current.addErrorListener(RawReceivePort((pair) async {
+  final List<dynamic> errorAndStacktrace = pair;
+  await FirebaseCrashlytics.instance.recordError(
+    errorAndStacktrace.first,
+    errorAndStacktrace.last,
+    fatal: true,
+  );
+  }).sendPort);
 
   runApp(const AppProviders());
 }
