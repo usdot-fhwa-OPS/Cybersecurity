@@ -12,6 +12,11 @@ import 'firebase_options.dart';
 import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 
+// Amplify Flutter Packages
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'amplifyconfiguration.dart';
+
 final LoginInfo _loginInfo = LoginInfo();
 final ZoomInfo _zoomInfo = ZoomInfo();
 
