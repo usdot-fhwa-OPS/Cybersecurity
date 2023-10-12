@@ -6,6 +6,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/device.dart';
 import '../utils/zoom_info.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
@@ -197,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void selectSearchDevice(Device d){
     updateRecentDevices(d);
-    context.go('/Home/details');
+    context.go('/Home/details', extra: d);
   }
 
   int getCategories(List<Device> devices){
@@ -330,41 +331,3 @@ class DeviceCard extends StatelessWidget {
   }
 }
 
-class Device {
-  final int id;
-  final String vendor;
-  final String category;
-  final String model;
-  final String imageUrl;
-  final String description;
-
-  Device({required this.id, required this.vendor, required this.category, required this.model, required this.imageUrl, required this.description});
-
-  factory Device.fromJson(Map<String, dynamic> json, int deviceId) {
-    return Device(
-      id: deviceId,
-      vendor: json["vendor"],
-      category: json["category"],
-      model: json["model"],
-      imageUrl: json["imageUrl"],
-      description: json["description"],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "device": {
-        "vendor": vendor,
-        "category": category,
-        "model": model,
-        "imageUrl": imageUrl,
-        "description": description,
-      }
-    };
-  }
-
-  String deviceAsString(){
-    return '$vendor $model';
-  }
-}
