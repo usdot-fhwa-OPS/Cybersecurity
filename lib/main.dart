@@ -16,28 +16,28 @@ import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 final LoginInfo _loginInfo = LoginInfo();
 final ZoomInfo _zoomInfo = ZoomInfo();
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
 
-  // Catches all fatal errors and non-fatal then sends them to Crashlytics.
+  const fatalError = true;
+  // Non-async exceptions
   FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    if (fatalError) {
+      // If you want to record a "fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      // ignore: dead_code
+    } else {
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    }
   };
+  
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-  // Catches errors that happen outside of Flutter context
-  Isolate.current.addErrorListener(RawReceivePort((pair) async {
-  final List<dynamic> errorAndStacktrace = pair;
-  await FirebaseCrashlytics.instance.recordError(
-    errorAndStacktrace.first,
-    errorAndStacktrace.last,
-    fatal: true,
-  );
-  }).sendPort);
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
   runApp(const AppProviders());
 }

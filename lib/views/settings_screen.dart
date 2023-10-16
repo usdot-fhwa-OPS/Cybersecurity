@@ -44,22 +44,6 @@ class SettingsScreen extends StatelessWidget {
                 ZoomLevelAdjustment(),
               ],
             ),
-
-            // Button for testing a fatal error
-            ElevatedButton(
-                        onPressed: () {
-                          FirebaseCrashlytics.instance
-                              .setCustomKey('example', 'flutterfire');
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                'Custom Key "example: flutterfire" has been set \n'
-                                'Key will appear in Firebase Console once an error has been reported.'),
-                            duration: Duration(seconds: 5),
-                          ));
-                        },
-                        child: const Text('Key'),
-                      ),
                       ElevatedButton(
                         onPressed: () {
                           FirebaseCrashlytics.instance
@@ -108,26 +92,10 @@ class SettingsScreen extends StatelessWidget {
                         child: const Text('Throw Error'),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                'Uncaught Exception that is handled by second parameter of runZonedGuarded.'),
-                            duration: Duration(seconds: 5),
-                          ));
-
-                          // Example of an exception that does not get caught
-                          // by `FlutterError.onError` but is caught by
-                          // `runZonedGuarded`.
-                          runZonedGuarded(() {
-                            Future<void>.delayed(const Duration(seconds: 2),
-                                () {
-                              final List<int> list = <int>[];
-                              print(list[100]);
-                            });
-                          }, FirebaseCrashlytics.instance.recordError);
+                        onPressed: () async {
+                          throw Error();
                         },
-                        child: const Text('Async out of bounds'),
+                        child: const Text('Async Error'),
                       ),
                       ElevatedButton(
                         onPressed: () async {
