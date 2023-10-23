@@ -1,17 +1,18 @@
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:cybersecurity_its_app/utils/device.dart';
+import 'dart:convert';
+
 
 //TODO -- Refactor with Provider
 class OpContextScreen extends StatefulWidget {
-  const OpContextScreen({required this.label, this.vendor,
-  this.deviceType, this.model, Key? key})
+  const OpContextScreen({required this.label, this.deviceJson, Key? key})
     : super(key: key);
 
     /// The label
   final String label;
-  final String? vendor;
-  final String? deviceType;
-  final String? model;
+  final String? deviceJson;
 
   @override
   State<OpContextScreen> createState() => _OpContextScreenState();
@@ -30,6 +31,14 @@ class _OpContextScreenState extends State<OpContextScreen> {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
+    Map<String, dynamic> decodedJSON = jsonDecode(widget.deviceJson!);
+    Map<String, dynamic> securityRecommendations = {...decodedJSON};
+    securityRecommendations.remove("device");
+    securityRecommendations.remove("id");
+    securityRecommendations.remove("connectionType");
+    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Operational Context"),
@@ -40,7 +49,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          DeviceDropdown(dropdownLabel: 'Connection Type', dropdownList: connectionList, dropdownController: typeController, selectedItem: selectedType),
+          DeviceDropdown(dropdownLabel: 'Connection Type', dropdownList: device.connectionType.keys.toList(), dropdownController: typeController, selectedItem: selectedType),
           DeviceDropdown(dropdownLabel: 'Intended Use', dropdownList: intendedUseList, dropdownController: useController, selectedItem: selectedUse),
       
           Padding(
@@ -48,7 +57,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
             child: ElevatedButton(
               style: style,
               //TODO: pass typeController.text and useController.text via onPressed to the Security Configurations page
-              onPressed: () => print('${typeController.text} + ${useController.text}'),
+              onPressed: () => context.goNamed('recommendations', pathParameters: {'deviceJson': device.toJson().toString()}),
               child: const Text('Begin Secure Configuration'),
             ),
           ),
@@ -58,10 +67,6 @@ class _OpContextScreenState extends State<OpContextScreen> {
   }
 }
 
-final List<String> connectionList = [
-  'Cellular', 'Hardwired', 'Wifi', 'Satellite'
-];
-
 final List<String> intendedUseList = [
-  'TBD','TBD 2','TBD 3', 'TBD 4'
+  'TBD',
 ];

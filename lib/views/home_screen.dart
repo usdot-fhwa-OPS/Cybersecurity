@@ -29,12 +29,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<String> demoJsons = [
-    "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
-    "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
-    "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}"
+    "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}", 
+    "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}",
+    "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}",
+    "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}", 
+    "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}", 
+    "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}}"
    ];
 
   final _userEditTextController = TextEditingController();
@@ -160,7 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (savedRecentSearches != ""){
       List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
       for(dynamic d in recentSearchesDynamic){
-        Device device = Device.fromJson(d["device"], d["id"]);
+        Map<String, dynamic> securityRecommendations = {...d};
+        securityRecommendations.remove("device");
+        securityRecommendations.remove("id");
+        securityRecommendations.remove("connectionType");
+        Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
         if(!recentSearches.keys.contains(device.id)){
           recentSearches[device.id] = device;
         }
@@ -170,7 +174,12 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Device> devices = List.from(recentSearches.values);
     for (String json in demoJsons){
       Map<String, dynamic> decodedJSON = jsonDecode(json);
-      Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"]);
+    Map<String, dynamic> securityRecommendations = {...decodedJSON};
+    securityRecommendations.remove("device");
+    securityRecommendations.remove("id");
+    securityRecommendations.remove("connectionType");
+    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+
       if (!recentSearches.keys.contains(device.id)){
         devices.add(device);
       }
@@ -198,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void selectSearchDevice(Device d){
     updateRecentDevices(d);
-    context.go('/Home/details', extra: d);
+    context.goNamed('details', pathParameters: {'deviceJson': d.toJson().toString()});
   }
 
   int getCategories(List<Device> devices){
@@ -261,7 +270,7 @@ class Category extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: devices.length,
                 itemBuilder: (context, index) {
-                  return DeviceCard(label: devices[index].deviceAsString(), description: devices[index].description, image: devices[index].imageUrl);
+                  return DeviceCard(device: devices[index]);
                 }
               ),
             ),
@@ -274,22 +283,16 @@ class Category extends StatelessWidget {
 
 class DeviceCard extends StatelessWidget {
   /// Creates a HelpScreen
-  const DeviceCard({required this.label, required this.description, required this.image, Key? key})
+  const DeviceCard({required this.device, Key? key})
       : super(key: key);
 
   /// The label
-  final String label;
-
-    /// The description
-  final String description;
-  
-    /// The image
-  final String image;
+  final Device device;
 
     @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:  () => context.go('/Home/details'),
+      onTap:  () => context.goNamed('details', pathParameters: {'deviceJson': device.toJson().toString()}),
       child: Card(
         elevation: 3,
         shape: const RoundedRectangleBorder(
@@ -305,21 +308,21 @@ class DeviceCard extends StatelessWidget {
             children: [
               Expanded(child: 
                 Image.network(
-                  image,
+                  device.imageUrl,
                   fit: BoxFit.cover,
                 )
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
                 child: Text(
-                  label,
+                  device.deviceAsString(),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
                 child: Text(
-                  description,
+                  device.description,
                   style: const TextStyle(fontSize: 13),
                 ),
               ),
