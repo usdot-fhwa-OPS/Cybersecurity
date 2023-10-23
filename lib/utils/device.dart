@@ -35,14 +35,19 @@ class Device {
       },
       "\"connectionType\"": addQuotesToKeys(connectionType),
     };
-    deviceData.addAll(securityRecommendations);
+    deviceData.addAll(addQuotesToKeys(securityRecommendations));
     return deviceData;
   }
 
   Map<String, dynamic> addQuotesToKeys(Map<String, dynamic> m){
     Map<String, dynamic> mapWithQuotes = {};
     for (String key in m.keys){
-      mapWithQuotes[addQuotesToString(key)] = m[key];
+      dynamic value = m[key];
+      //if value is also a map
+      if(value.runtimeType == mapWithQuotes.runtimeType){
+        value = addQuotesToKeys(value);
+      }
+      mapWithQuotes[addQuotesToString(key)] = value;
     }
     return mapWithQuotes;
   }

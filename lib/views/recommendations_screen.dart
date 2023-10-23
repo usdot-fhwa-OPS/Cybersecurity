@@ -19,6 +19,10 @@ class RecommendationsScreen extends StatefulWidget {
 
 class _RecommendationsScreenState extends State<RecommendationsScreen> {
 
+  final TextEditingController recommendationController = TextEditingController();
+
+  String? selectedRecommendation;  
+
   @override
   Widget build(BuildContext context) {
 
@@ -28,6 +32,11 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     securityRecommendations.remove("id");
     securityRecommendations.remove("connectionType");
     Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+    
+    final List<DropdownMenuEntry<String>> dropdownEntries = <DropdownMenuEntry<String>>[];
+    for (final item in device.securityRecommendations.keys.toList()) {
+      dropdownEntries.add(DropdownMenuEntry<String>(value: item, label: item));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -38,10 +47,66 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         centerTitle: true,
       ),
       body: ListView(
-        children: const <Widget>[
-          
+        children: <Widget>[
+          Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
+                  child: Text(device.deviceAsString(),
+                    style: Theme.of(context).textTheme.titleLarge),
+                ),              
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+                  child: DropdownMenu<String>(
+                    width: 250.0,
+                    initialSelection: device.securityRecommendations.keys.toList()[0],
+                    controller: recommendationController,
+                    dropdownMenuEntries: dropdownEntries,
+                    onSelected: (String? item) {
+                      setState(() {
+                        selectedRecommendation = item!;
+                      });
+                    }
+                  ),
+                )
+              ],
+            )
+          ),
+          updateSecurityRecommendations(securityRecommendations)
         ],
       ),
     );
+  }
+
+  Widget updateSecurityRecommendations(Map<String, dynamic> securityRecommendations){
+    if(selectedRecommendation == null && securityRecommendations.isNotEmpty){
+      selectedRecommendation = securityRecommendations.keys.first;
+    }
+    if(securityRecommendations.containsKey(selectedRecommendation)){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (String recommendation in securityRecommendations[selectedRecommendation].keys)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 36.0, top: 32.0, right: 36.0),
+                  child: Text(recommendation),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 36.0, top: 8.0, right: 26.0),
+                  child: Text(securityRecommendations[selectedRecommendation][recommendation].toString()),
+                ),
+              ],
+            ),      
+        ],
+      );
+    }
+    return const Center(child: Padding(
+      padding: EdgeInsets.all(28.0),
+      child: Text("No Recommendations"),
+    ));
   }
 }
