@@ -10,6 +10,34 @@
       "StackName": "amplify-opscybersecurityapp-dev-151843",
       "StackId": "arn:aws:cloudformation:us-east-1:286010155551:stack/amplify-opscybersecurityapp-dev-151843/0249fb10-63b4-11ee-98fd-0e6fda886e25",
       "AmplifyAppId": "d24ebri8h39gk3"
+    },
+    "categories": {
+      "auth": {
+        "opscybersecurityapp": {
+          "nativeClientId": "6t5n0kjhusp0t2k2m0s1br17kt",
+          "userPoolId": "us-east-1_R4L2tpqhr",
+          "userPoolName": "ocs_DevPool",
+          "webClientId": "6t5n0kjhusp0t2k2m0s1br17kt"
+        }
+      }
+    }
+  },
+  "ocsitsapp": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-opscybersecurityapp-ocsitsapp-111716-authRole",
+      "UnauthRoleArn": "arn:aws:iam::286010155551:role/amplify-opscybersecurityapp-ocsitsapp-111716-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::286010155551:role/amplify-opscybersecurityapp-ocsitsapp-111716-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-opscybersecurityapp-ocsitsapp-111716-deployment",
+      "UnauthRoleName": "amplify-opscybersecurityapp-ocsitsapp-111716-unauthRole",
+      "StackName": "amplify-opscybersecurityapp-ocsitsapp-111716",
+      "StackId": "arn:aws:cloudformation:us-east-1:286010155551:stack/amplify-opscybersecurityapp-ocsitsapp-111716/1988a250-6c37-11ee-a38a-0e62783620b5",
+      "AmplifyAppId": "d24ebri8h39gk3"
+    },
+    "categories": {
+      "auth": {
+        "opscybersecurityapp3e133ede": {}
+      }
     }
   }
 }

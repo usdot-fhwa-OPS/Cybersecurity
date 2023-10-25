@@ -1,1 +1,45 @@
-{}
+{
+  "auth": {
+    "opscybersecurityapp": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_opscybersecurityapp_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "opscybersecurityapp"
+        }
+      ]
+    },
+    "AMPLIFY_auth_opscybersecurityapp_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "opscybersecurityapp"
+        }
+      ]
+    },
+    "AMPLIFY_auth_opscybersecurityapp_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "opscybersecurityapp"
+        }
+      ]
+    },
+    "AMPLIFY_auth_opscybersecurityapp_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "opscybersecurityapp"
+        }
+      ]
+    }
+  }
+}
