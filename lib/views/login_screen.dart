@@ -30,7 +30,10 @@ class LoginScreenState extends State<LoginScreen>{
         context.go('/Home');
       }
     } on AuthException catch (e) {
-      safePrint('Error signing in: ${e.message}');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error signing in: ${e.message}'),
+          backgroundColor: const Color(0xFFD50000),
+          behavior: SnackBarBehavior.floating,));
     }
   }
 
