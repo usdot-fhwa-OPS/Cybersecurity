@@ -1,6 +1,7 @@
 import 'package:cybersecurity_its_app/views/operational_context_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:cybersecurity_its_app/widgets/bottom_nav_bar.dart';
@@ -9,6 +10,7 @@ import 'package:cybersecurity_its_app/views/login_screen.dart';
 import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
 import 'package:cybersecurity_its_app/views/help_screen.dart';
 import 'package:cybersecurity_its_app/views/settings_screen.dart';
+
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>(); 
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
@@ -18,14 +20,19 @@ final _loginInfo = LoginInfo();
 
 /// The route configuration.
 final goRouter = GoRouter(
-  initialLocation: '/Home',
+  initialLocation: '/Login',
   navigatorKey: _rootNavigatorKey,
   routes: [
-    // Stateful nested navigation based on:
-    // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/Login',
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: LoginScreen(label: 'ITS Device Security Login'),
+      ),
+    ),
+
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        // the UI shell
         return BottomNavBar(
             navigationShell: navigationShell);
       },
@@ -91,22 +98,12 @@ final goRouter = GoRouter(
         ),
       ],
     ),
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/Login',
-      pageBuilder: (context, state) => const NoTransitionPage(
-        child: LoginScreen(label: 'ITS Device Security Login'),
-      ),
-    ),
-
   ],
-
-  // redirect to the login page if the user is not logged in
-    redirect: (BuildContext context, GoRouterState state) {
+  redirect: (BuildContext context, GoRouterState state) async {
       // if the user is not logged in, they need to login
-      final bool loggedIn = _loginInfo.loggedIn;
+      final result = await Amplify.Auth.fetchAuthSession();
       final bool loggingIn = state.matchedLocation == '/Login';
-      if (!loggedIn) {
+      if (!result.isSignedIn) {
         return '/Login';
       }
 

@@ -1,5 +1,9 @@
 {
   "projectPath": "C:\\DEC\\Cybersecurity-ITS-App-1",
+<<<<<<< HEAD
   "defaultEditor": "Visual Studio Code",
+=======
+  "defaultEditor": "vscode",
+>>>>>>> 9a840843ed17d99efd500514671e0bbf44b13c19
   "envName": "dev"
 }
