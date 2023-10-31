@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -67,21 +68,31 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ZoomLevelAdjustment(),
               ],
             ),
-            TextButton(
-              onPressed: () => throw Exception(),
-              child: const Text("Throw Test Exception"),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(
-                  content: Text('App will crash is 5 seconds \n'
-                      'Please reopen to send data to Crashlytics'),
-                  duration: Duration(seconds: 5),
-                ));
+                      ElevatedButton(
+                        onPressed: () {
+                          FirebaseCrashlytics.instance
+                              .log('This is a log example');
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'The message "This is a log example" has been logged \n'
+                                'Message will appear in Firebase Console once an error has been reported.'),
+                            duration: Duration(seconds: 5),
+                          ));
+                        },
+                        child: const Text('Log'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('App will crash is 5 seconds \n'
+                                'Please reopen to send data to Crashlytics'),
+                            duration: Duration(seconds: 5),
+                          ));
 
-                // Delay crash for 5 seconds
-                sleep(const Duration(seconds: 5));
+                          // Delay crash for 5 seconds
+                          sleep(const Duration(seconds: 5));
 
                 // Use FirebaseCrashlytics to throw an error. Use this for
                 // confirmation that errors are being correctly reported.
