@@ -153,23 +153,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<Device>> getDevices(List<String> demoJsons) async {
-    recentSearches.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String savedRecentSearches = "";
-    savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-    if (savedRecentSearches != ""){
-      List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
-      for(dynamic d in recentSearchesDynamic){
-        Map<String, dynamic> securityRecommendations = {...d};
-        securityRecommendations.remove("device");
-        securityRecommendations.remove("id");
-        securityRecommendations.remove("connectionType");
-        Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
-        if(!recentSearches.keys.contains(device.id)){
-          recentSearches[device.id] = device;
-        }
-      }
-    }
+
+    //recentSearches is a map <int, Device> that gets saved to persistent storage in the background
+    // recentSearches.clear();
+
+    //gets an instance of sharedpreferences
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //declares a string for savedRecentSearches
+    // String savedRecentSearches = "";
+
+    //retrieves the recentSearchesList from background and assigns it
+    // savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+
+    //if our recent searches list isn't empty
+    // if (savedRecentSearches != ""){
+
+        //makes a dynamic list of saved recent searches
+    //   List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
+  
+        //iterates through every recentSearch present in the list
+    //   for(dynamic d in recentSearchesDynamic){
+
+          //adds recentSearch to a map
+    //     Map<String, dynamic> securityRecommendations = {...d};
+
+          //removes everything but the security recommendation
+    //     securityRecommendations.remove("device");
+    //     securityRecommendations.remove("id");
+    //     securityRecommendations.remove("connectionType");
+
+          //creates a Device object from the dissected device data in recent searches
+    //     Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
+
+          //if the device isn't yet in the recent searches map, it gets added
+    //     if(!recentSearches.keys.contains(device.id)){
+    //       recentSearches[device.id] = device;
+    //     }
+    //   }
+    // }
 
     List<Device> devices = List.from(recentSearches.values);
     for (String json in demoJsons){
