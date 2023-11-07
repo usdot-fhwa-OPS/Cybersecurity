@@ -1,29 +1,54 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
-class SettingsScreen extends StatelessWidget {
-  /// Creates a SettingsScreen
-  const SettingsScreen({required this.label, Key? key}) : super(key: key);
 
-  /// The label
-  final String label;
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({
+    required this.label, 
+    Key? key,
+  }) : super(key: key);
+  
+  final String label; 
+
+  @override
+  State<SettingsScreen> createState() => SettingsScreenState();
+}
+class SettingsScreenState extends State<SettingsScreen> {
 
   logoutButtonPressed(BuildContext context) {
     Provider.of<LoginInfo>(context, listen: false).logout();
   }
+
+  Future<void> signOutCurrentUser() async {
+    try {
+      final result = await Amplify.Auth.signOut();
+      if (result is CognitoCompleteSignOut && mounted) {
+        safePrint('Sign out completed successfully');
+        context.go('/Login');
+      } else if (result is CognitoFailedSignOut) {
+        safePrint('Error signing user out: ${result.exception.message}');
+      }
+    } catch (e) {
+        safePrint('');
+    }
+  } 
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(label),
+        title: Text(widget.label),
         iconTheme: IconThemeData(
           color: Colors.black,
           size: (22 * Provider.of<ZoomInfo>(context).zoomLevel),
@@ -32,8 +57,8 @@ class SettingsScreen extends StatelessWidget {
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
+      body: 
+      Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListView(
@@ -43,21 +68,31 @@ class SettingsScreen extends StatelessWidget {
                 ZoomLevelAdjustment(),
               ],
             ),
-            TextButton(
-              onPressed: () => throw Exception(),
-              child: const Text("Throw Test Exception"),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(
-                  content: Text('App will crash is 5 seconds \n'
-                      'Please reopen to send data to Crashlytics'),
-                  duration: Duration(seconds: 5),
-                ));
+                      ElevatedButton(
+                        onPressed: () {
+                          FirebaseCrashlytics.instance
+                              .log('This is a log example');
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'The message "This is a log example" has been logged \n'
+                                'Message will appear in Firebase Console once an error has been reported.'),
+                            duration: Duration(seconds: 5),
+                          ));
+                        },
+                        child: const Text('Log'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('App will crash is 5 seconds \n'
+                                'Please reopen to send data to Crashlytics'),
+                            duration: Duration(seconds: 5),
+                          ));
 
-                // Delay crash for 5 seconds
-                sleep(const Duration(seconds: 5));
+                          // Delay crash for 5 seconds
+                          sleep(const Duration(seconds: 5));
 
                 // Use FirebaseCrashlytics to throw an error. Use this for
                 // confirmation that errors are being correctly reported.
@@ -65,21 +100,24 @@ class SettingsScreen extends StatelessWidget {
               },
               child: const Text('Crash'),
             ),
-            Expanded(
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: MaterialButton(
-                        color: Colors.indigo,
-                        onPressed: () => logoutButtonPressed(context),
-                        child: const Text('Logout',
-                            style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ))),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red
+                  ),
+                  onPressed: () {
+                    //TODO remove test data and add actual authentication
+                    //context.read<LoginInfo>().login('test-user');
+                    signOutCurrentUser();
+                  },
+                  child: const Text('Sign Out'),
+                ),
+              ),
+            ),
           ],
-        ),
       ),
     );
   }
