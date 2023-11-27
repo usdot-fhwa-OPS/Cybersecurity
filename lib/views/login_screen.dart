@@ -2,6 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget{
   const LoginScreen({
@@ -19,7 +20,9 @@ class LoginScreenState extends State<LoginScreen>{
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
 
+
   Future<void> signInUser({required String password, required String username}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       final result = await Amplify.Auth.signIn(
         username: username,
@@ -27,6 +30,17 @@ class LoginScreenState extends State<LoginScreen>{
       );
 
       if (result.isSignedIn && mounted) {
+        //gets user email stores, it in local storage
+        final result = await Amplify.Auth.fetchUserAttributes();
+        final data = {for (var e in result) e.userAttributeKey.key: e.value};
+        prefs.setString('userEmail', data['email']!);
+
+        //gets user group(s), stores it in local storage
+        final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
+        final idToken = session.userPoolTokensResult.value;
+        final userGroups = idToken.accessToken;
+        prefs.setString('userGroup', userGroups.groups.join(','));
+       
         context.go('/Home');
       }
     } on AuthException catch (e) {
@@ -36,17 +50,7 @@ class LoginScreenState extends State<LoginScreen>{
           behavior: SnackBarBehavior.floating,));
     }
   }
-
-  Future<void> signOutCurrentUser() async {
-  final result = await Amplify.Auth.signOut();
-  if (result is CognitoCompleteSignOut) {
-    safePrint('Sign out completed successfully');
-  } else if (result is CognitoFailedSignOut) {
-    safePrint('Error signing user out: ${result.exception.message}');
-  }
-}
-
- 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

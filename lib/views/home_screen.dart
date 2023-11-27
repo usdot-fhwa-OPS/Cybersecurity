@@ -152,19 +152,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<Device>> getDevices(List<String> demoJsons) async {
-    recentSearches.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String savedRecentSearches = "";
-    savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-    if (savedRecentSearches != ""){
-      List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
-      for(dynamic d in recentSearchesDynamic){
-        Device device = Device.fromJson(d["device"], d["id"]);
-        if(!recentSearches.keys.contains(device.id)){
-          recentSearches[device.id] = device;
-        }
-      }
-    }
+    // recentSearches.clear();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String savedRecentSearches = "";
+    // savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+    // if (savedRecentSearches != ""){
+    //   List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
+    //   for(dynamic d in recentSearchesDynamic){
+    //     Device device = Device.fromJson(d["device"], d["id"]);
+    //     if(!recentSearches.keys.contains(device.id)){
+    //       recentSearches[device.id] = device;
+    //     }
+    //   }
+    // }
 
     List<Device> devices = List.from(recentSearches.values);
     for (String json in demoJsons){
