@@ -50,17 +50,7 @@ class LoginScreenState extends State<LoginScreen>{
           behavior: SnackBarBehavior.floating,));
     }
   }
-
-  Future<void> signOutCurrentUser() async {
-  final result = await Amplify.Auth.signOut();
-  if (result is CognitoCompleteSignOut) {
-    safePrint('Sign out completed successfully');
-  } else if (result is CognitoFailedSignOut) {
-    safePrint('Error signing user out: ${result.exception.message}');
-  }
-}
-
- 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,12 +113,6 @@ class LoginScreenState extends State<LoginScreen>{
                     child: const Text('Login'),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    signOutCurrentUser();
-                  },
-                  child: const Text('Sign Out'),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, left: 16, right: 16),
