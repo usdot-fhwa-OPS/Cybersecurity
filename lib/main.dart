@@ -1,4 +1,3 @@
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -16,6 +15,7 @@ import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 // Amplify Flutter Packages
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_api/amplify_api.dart';
 import 'amplifyconfiguration.dart';
 
 final LoginInfo _loginInfo = LoginInfo();
@@ -53,10 +53,11 @@ Future<void> _configureAmplify() async {
 
     // Add any Amplify plugins you want to use
     final authPlugin = AmplifyAuthCognito();
-    await Amplify.addPlugin(authPlugin);
+    final api = AmplifyAPI();
+    //await Amplify.addPlugin(authPlugin);
 
     // You can use addPlugins if you are going to be adding multiple plugins
-    // await Amplify.addPlugins([authPlugin, analyticsPlugin]);
+    await Amplify.addPlugins([authPlugin, api]);
 
     // Once Plugins are added, configure Amplify
     // Note: Amplify can only be configured once.

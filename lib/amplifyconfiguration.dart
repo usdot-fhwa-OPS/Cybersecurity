@@ -16,6 +16,14 @@ const amplifyconfig = '''{
                         "Region": "us-east-1"
                     }
                 },
+                "CredentialsProvider": {
+                    "CognitoIdentity": {
+                        "Default": {
+                            "PoolId": "us-east-1:73202b77-1846-4222-beb8-b85d8486228a",
+                            "Region": "us-east-1"
+                        }
+                    }
+                },
                 "Auth": {
                     "Default": {
                         "authenticationFlowType": "USER_SRP_AUTH",
@@ -41,6 +49,18 @@ const amplifyconfig = '''{
                             "EMAIL"
                         ]
                     }
+                }
+            }
+        }
+    },
+    "api": {
+        "plugins": {
+            "awsAPIPlugin": {
+                "requestall": {
+                    "endpointType": "REST",
+                    "endpoint": "https://feqgku27k5.execute-api.us-east-1.amazonaws.com/dev/data",
+                    "region": "us-east-1",
+                    "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
             }
         }

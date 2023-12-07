@@ -19,6 +19,17 @@
           "userPoolName": "ocs_DevPool",
           "webClientId": "6t5n0kjhusp0t2k2m0s1br17kt"
         }
+      },
+      "storage": {
+        "ocsDevTable": {
+          "tableName": "ocsDevTable",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:286010155551:table/ocsDevTable",
+          "partitionKeyName": "DeviceBrand",
+          "partitionKeyType": "S",
+          "sortKeyName": "DeviceModel",
+          "sortKeyType": "S"
+        }
       }
     }
   },

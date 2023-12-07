@@ -50,5 +50,23 @@
       },
       "lastPushTimeStamp": "2023-10-23T17:21:01.701Z"
     }
+  },
+  "storage": {
+    "ocsDevTable": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "Name": "ocsDevTable",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:dynamodb:us-east-1:286010155551:table/ocsDevTable",
+        "PartitionKeyName": "DeviceBrand",
+        "PartitionKeyType": "S",
+        "SortKeyName": "DeviceModel",
+        "SortKeyType": "S"
+      },
+      "lastPushTimeStamp": "2023-12-01T16:39:46.740Z"
+    }
   }
 }

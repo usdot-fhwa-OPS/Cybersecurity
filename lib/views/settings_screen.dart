@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
-import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +24,6 @@ class SettingsScreen extends StatefulWidget {
 class SettingsScreenState extends State<SettingsScreen> {
   String? _userEmail;
   String? _userGroup;
-
-  logoutButtonPressed(BuildContext context) {
-    Provider.of<LoginInfo>(context, listen: false).logout();
-  }
 
   Future<void> signOutCurrentUser() async {
     try {
@@ -51,6 +46,25 @@ class SettingsScreenState extends State<SettingsScreen> {
     _userGroup = prefs.getString("userGroup");
     if(mounted){
       setState(() {});
+    }
+  }
+
+  Future<void> getDevicesFromApi() async {
+    try {
+     
+      final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
+      final idToken = session.userPoolTokensResult.value.idToken.raw;
+      print(idToken);
+      final restOperation = Amplify.API.get(
+        'requestuserdevices',
+        headers: {
+          'authorization': idToken
+        },
+      );
+      final response = await restOperation.response;
+      print('Get call succeeded: ${response.decodeBody()}');
+    } on ApiException catch (e) {
+      print('Get call failed: $e');
     }
   }
 
@@ -156,6 +170,21 @@ class SettingsScreenState extends State<SettingsScreen> {
                     signOutCurrentUser();
                   },
                   child: const Text('Sign Out'),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red
+                  ),
+                  onPressed: () {
+                    getDevicesFromApi();
+                  },
+                  child: const Text('Get Devices'),
                 ),
               ),
             ),
