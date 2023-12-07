@@ -49,25 +49,6 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> getDevicesFromApi() async {
-    try {
-     
-      final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
-      final idToken = session.userPoolTokensResult.value.idToken.raw;
-      print(idToken);
-      final restOperation = Amplify.API.get(
-        'requestuserdevices',
-        headers: {
-          'authorization': idToken
-        },
-      );
-      final response = await restOperation.response;
-      print('Get call succeeded: ${response.decodeBody()}');
-    } on ApiException catch (e) {
-      print('Get call failed: $e');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -170,21 +151,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                     signOutCurrentUser();
                   },
                   child: const Text('Sign Out'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red
-                  ),
-                  onPressed: () {
-                    getDevicesFromApi();
-                  },
-                  child: const Text('Get Devices'),
                 ),
               ),
             ),

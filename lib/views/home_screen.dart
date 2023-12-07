@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 import '../utils/zoom_info.dart';
 
@@ -39,6 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
   final _userEditTextController = TextEditingController();
   Set<String> categories = <String>{};
   Map<int, Device> recentSearches = {};
+
+  Future<void> getDevicesFromApi() async {
+    try {
+     
+      final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
+      final idToken = session.userPoolTokensResult.value.idToken.raw;
+      final restOperation = Amplify.API.get(
+        'requestuserdevices',
+        headers: {
+          'authorization': idToken
+        },
+      );
+      final response = await restOperation.response;
+      final deviceData = response.decodeBody().toString();
+      print('Get call succeeded: ${deviceData.runtimeType}');
+    } on ApiException catch (e) {
+      print('Get call failed: $e');
+    }
+
+    if(mounted){
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDevicesFromApi();
+  }
 
 
   @override
