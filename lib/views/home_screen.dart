@@ -55,7 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       final response = await restOperation.response;
       final deviceData = response.decodeBody().toString();
-      print('Get call succeeded: ${deviceData.runtimeType}');
+      final parsedJson = jsonDecode(deviceData);
+      print('${parsedJson['Items'].runtimeType} : ${parsedJson['Items']}');
+      //print('Get call succeeded: ${deviceData.runtimeType}');
     } on ApiException catch (e) {
       print('Get call failed: $e');
     }
