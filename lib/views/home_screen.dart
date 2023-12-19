@@ -9,7 +9,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 import '../utils/zoom_info.dart';
-
+import '../utils/device.dart';
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatefulWidget {
   /// Creates a HomeScreen
@@ -42,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Set<String> categories = <String>{};
   Map<int, Device> recentSearches = {};
 
+  late final Map<String, dynamic> _parsedJson;
+
   Future<void> getDevicesFromApi() async {
     try {
      
@@ -54,10 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
       final response = await restOperation.response;
-      final deviceData = response.decodeBody().toString();
-      final parsedJson = jsonDecode(deviceData);
-      print('${parsedJson['Items'].runtimeType} : ${parsedJson['Items']}');
-      //print('Get call succeeded: ${deviceData.runtimeType}');
+      final decodedResponse = response.decodeBody().toString();
+    
+      _parsedJson = jsonDecode(decodedResponse);
+      print('${_parsedJson['Items'].runtimeType} : ${_parsedJson['Items']}');
+      //print(_parsedJson)
     } on ApiException catch (e) {
       print('Get call failed: $e');
     }
@@ -184,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<List<Device>> getDevices(List<String> demoJsons) async {
+  Future<List<Device>> getDevices(List<dynamic> demoJsons) async {
     // recentSearches.clear();
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String savedRecentSearches = "";
