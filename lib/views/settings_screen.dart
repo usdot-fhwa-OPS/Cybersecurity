@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SettingsScreen extends StatefulWidget {
@@ -24,6 +23,8 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => SettingsScreenState();
 }
 class SettingsScreenState extends State<SettingsScreen> {
+  String? _userEmail;
+  String? _userGroup;
 
   logoutButtonPressed(BuildContext context) {
     Provider.of<LoginInfo>(context, listen: false).logout();
@@ -41,7 +42,23 @@ class SettingsScreenState extends State<SettingsScreen> {
     } catch (e) {
         safePrint('');
     }
-  } 
+  }
+
+  Future<void> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    _userEmail = prefs.getString("userEmail");
+    _userGroup = prefs.getString("userGroup");
+    if(mounted){
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPrefs();  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,46 +76,73 @@ class SettingsScreenState extends State<SettingsScreen> {
       ),
       body: 
       Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: Text(
+                'Account Information',
+                style: TextStyle(fontSize: 18)
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: Row(
+                children: [ 
+                  const Icon(
+                    Icons.account_circle,
+                    size: 30,
+                    color: Colors.indigo
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: 
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Email Address:'),
+                          Text('$_userEmail')
+                        ]
+                      )
+                  )
+                ]
+              ),
+            ), 
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: Row(
+                children: [ 
+                  const Icon(
+                    Icons.groups,
+                    size: 30,
+                    color: Colors.indigo
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: 
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('User Group(s):'),
+                          Text('$_userGroup')
+                        ]
+                      )
+                  )
+                ]
+              ),
+            ), 
+            const Padding(
+              padding: EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: Text(
+                'Preferences',
+                style: TextStyle(fontSize: 18)
+              ),
+            ),
             ListView(
-              padding: const EdgeInsets.only(top: 8.0),
               shrinkWrap: true,
               children: <Widget>[
                 ZoomLevelAdjustment(),
               ],
-            ),
-                      ElevatedButton(
-                        onPressed: () {
-                          FirebaseCrashlytics.instance
-                              .log('This is a log example');
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                'The message "This is a log example" has been logged \n'
-                                'Message will appear in Firebase Console once an error has been reported.'),
-                            duration: Duration(seconds: 5),
-                          ));
-                        },
-                        child: const Text('Log'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('App will crash is 5 seconds \n'
-                                'Please reopen to send data to Crashlytics'),
-                            duration: Duration(seconds: 5),
-                          ));
-
-                          // Delay crash for 5 seconds
-                          sleep(const Duration(seconds: 5));
-
-                // Use FirebaseCrashlytics to throw an error. Use this for
-                // confirmation that errors are being correctly reported.
-                FirebaseCrashlytics.instance.crash();
-              },
-              child: const Text('Crash'),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
@@ -109,8 +153,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                     backgroundColor: Colors.red
                   ),
                   onPressed: () {
-                    //TODO remove test data and add actual authentication
-                    //context.read<LoginInfo>().login('test-user');
                     signOutCurrentUser();
                   },
                   child: const Text('Sign Out'),
@@ -140,7 +182,7 @@ class ZoomLevelAdjustment extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Align (
@@ -149,10 +191,11 @@ class ZoomLevelAdjustment extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 6),
+                padding: const EdgeInsets.only(right: 6, left: 16),
                 child:
                 Icon(Icons.zoom_in,
-                  size: (18 * Provider.of<ZoomInfo>(context).zoomLevel),
+                  size: (28 * Provider.of<ZoomInfo>(context).zoomLevel),
+                  color: Colors.indigo
                 )),
               const Padding(
                   padding: EdgeInsets.only(right: 10),
