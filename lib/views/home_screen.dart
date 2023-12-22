@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String savedRecentSearches = "";
 
     //retrieves the recentSearchesList from background and assigns it
-    //savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+    savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
 
     //if our recent searches list isn't empty
     if (savedRecentSearches != ""){
