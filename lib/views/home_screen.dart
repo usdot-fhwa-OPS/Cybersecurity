@@ -6,6 +6,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/device.dart';
 import '../utils/zoom_info.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
@@ -28,12 +29,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<String> demoJsons = [
-    "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
-    "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}",
-    "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}", 
-    "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"wifi\": true}}"
+    "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
+    "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
+    "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
+    "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}",  
+    "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
+    "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true},\"\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
    ];
 
   final _userEditTextController = TextEditingController();
@@ -152,24 +153,55 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<Device>> getDevices(List<String> demoJsons) async {
-    // recentSearches.clear();
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String savedRecentSearches = "";
-    // savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-    // if (savedRecentSearches != ""){
-    //   List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
-    //   for(dynamic d in recentSearchesDynamic){
-    //     Device device = Device.fromJson(d["device"], d["id"]);
-    //     if(!recentSearches.keys.contains(device.id)){
-    //       recentSearches[device.id] = device;
-    //     }
-    //   }
-    // }
+
+    //recentSearches is a map <int, Device> that gets saved to persistent storage in the background
+    recentSearches.clear();
+
+    //gets an instance of sharedpreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //declares a string for savedRecentSearches
+    String savedRecentSearches = "";
+
+    //retrieves the recentSearchesList from background and assigns it
+    savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+
+    //if our recent searches list isn't empty
+    if (savedRecentSearches != ""){
+      
+        //makes a dynamic list of saved recent searches
+      List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
+  
+        //iterates through every recentSearch present in the list
+      for(dynamic d in recentSearchesDynamic){
+
+          //adds recentSearch to a map
+        Map<String, dynamic> securityRecommendations = {...d};
+
+          //removes everything but the security recommendation
+        securityRecommendations.remove("device");
+        securityRecommendations.remove("id");
+        securityRecommendations.remove("connectionType");
+
+          //creates a Device object from the dissected device data in recent searches
+        Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
+
+          //if the device isn't yet in the recent searches map, it gets added
+        if(!recentSearches.keys.contains(device.id)){
+          recentSearches[device.id] = device;
+        }
+      }
+    }
 
     List<Device> devices = List.from(recentSearches.values);
     for (String json in demoJsons){
       Map<String, dynamic> decodedJSON = jsonDecode(json);
-      Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"]);
+    Map<String, dynamic> securityRecommendations = {...decodedJSON};
+    securityRecommendations.remove("device");
+    securityRecommendations.remove("id");
+    securityRecommendations.remove("connectionType");
+    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+
       if (!recentSearches.keys.contains(device.id)){
         devices.add(device);
       }
@@ -197,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void selectSearchDevice(Device d){
     updateRecentDevices(d);
-    context.go('/Home/details');
+    context.goNamed('details', pathParameters: {'deviceJson': d.toJson().toString()});
   }
 
   int getCategories(List<Device> devices){
@@ -260,7 +292,7 @@ class Category extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: devices.length,
                 itemBuilder: (context, index) {
-                  return DeviceCard(label: devices[index].deviceAsString(), description: devices[index].description, image: devices[index].imageUrl);
+                  return DeviceCard(device: devices[index]);
                 }
               ),
             ),
@@ -273,22 +305,16 @@ class Category extends StatelessWidget {
 
 class DeviceCard extends StatelessWidget {
   /// Creates a HelpScreen
-  const DeviceCard({required this.label, required this.description, required this.image, Key? key})
+  const DeviceCard({required this.device, Key? key})
       : super(key: key);
 
   /// The label
-  final String label;
-
-    /// The description
-  final String description;
-  
-    /// The image
-  final String image;
+  final Device device;
 
     @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:  () => context.go('/Home/details'),
+      onTap:  () => context.goNamed('details', pathParameters: {'deviceJson': device.toJson().toString()}),
       child: Card(
         elevation: 3,
         shape: const RoundedRectangleBorder(
@@ -304,21 +330,21 @@ class DeviceCard extends StatelessWidget {
             children: [
               Expanded(child: 
                 Image.network(
-                  image,
+                  device.imageUrl,
                   fit: BoxFit.cover,
                 )
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
                 child: Text(
-                  label,
+                  device.deviceAsString(),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
                 child: Text(
-                  description,
+                  device.description,
                   style: const TextStyle(fontSize: 13),
                 ),
               ),
@@ -330,41 +356,3 @@ class DeviceCard extends StatelessWidget {
   }
 }
 
-class Device {
-  final int id;
-  final String vendor;
-  final String category;
-  final String model;
-  final String imageUrl;
-  final String description;
-
-  Device({required this.id, required this.vendor, required this.category, required this.model, required this.imageUrl, required this.description});
-
-  factory Device.fromJson(Map<String, dynamic> json, int deviceId) {
-    return Device(
-      id: deviceId,
-      vendor: json["vendor"],
-      category: json["category"],
-      model: json["model"],
-      imageUrl: json["imageUrl"],
-      description: json["description"],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "device": {
-        "vendor": vendor,
-        "category": category,
-        "model": model,
-        "imageUrl": imageUrl,
-        "description": description,
-      }
-    };
-  }
-
-  String deviceAsString(){
-    return '$vendor $model';
-  }
-}
