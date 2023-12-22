@@ -1,16 +1,23 @@
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cybersecurity_its_app/utils/device.dart';
+import 'dart:convert';
 
 /// The details screen for selected device.
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     required this.label,
+    this.deviceJson,
     Key? key,
   }) : super(key: key);
 
   /// The label to display in the center of the screen.
   final String label;
+
+  final String? deviceJson;
+
+
 
   @override
   State<StatefulWidget> createState() => DetailsScreenState();
@@ -31,6 +38,13 @@ class DetailsScreenState extends State<DetailsScreen> {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
+    Map<String, dynamic> decodedJSON = jsonDecode(widget.deviceJson!);
+    Map<String, dynamic> securityRecommendations = {...decodedJSON};
+    securityRecommendations.remove("device");
+    securityRecommendations.remove("id");
+    securityRecommendations.remove("connectionType");
+    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.label),
@@ -41,15 +55,15 @@ class DetailsScreenState extends State<DetailsScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          DeviceDropdown(dropdownLabel: 'Vendor', dropdownList: vendorList, dropdownController: vendorController, selectedItem: selectedVendor),
-          DeviceDropdown(dropdownLabel: 'Device Type', dropdownList: deviceList, dropdownController: deviceController, selectedItem: selectedType),
-          DeviceDropdown(dropdownLabel: 'Model', dropdownList: modelList, dropdownController: modelController, selectedItem: selectedModel),
+          DeviceDropdown(dropdownLabel: 'Vendor', dropdownList: [device.vendor], dropdownController: vendorController, selectedItem: selectedVendor),
+          DeviceDropdown(dropdownLabel: 'Device Type', dropdownList: [device.category], dropdownController: deviceController, selectedItem: selectedType),
+          DeviceDropdown(dropdownLabel: 'Model', dropdownList: [device.model], dropdownController: modelController, selectedItem: selectedModel),
 
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
             child: ElevatedButton(
               style: style,
-              onPressed: () => context.goNamed('opcontext', pathParameters: {'vendor': vendorController.text, 'deviceType': deviceController.text, 'model': modelController.text}),
+              onPressed: () => context.goNamed('opcontext', pathParameters: {'deviceJson': device.toJson().toString()}),
               child: const Text('Next Step'),
             ),
           ),
@@ -58,15 +72,3 @@ class DetailsScreenState extends State<DetailsScreen> {
     );
   }
 }
-
-final List<String> vendorList = [
-  'Vendor 1', 'Vendor 2', 'Vendor 3', 'Vendor 4'
-];
-
-final List<String> deviceList = [
-  'Device 1', 'Device 2', 'Device 3', 'Device 4',
-];
-
-final List<String> modelList = [
-  'Model 1', 'Model 2', 'Model 3', 'Model 4'
-];

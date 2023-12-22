@@ -8,6 +8,7 @@ import 'package:cybersecurity_its_app/widgets/bottom_nav_bar.dart';
 import 'package:cybersecurity_its_app/views/home_screen.dart';
 import 'package:cybersecurity_its_app/views/login_screen.dart';
 import 'package:cybersecurity_its_app/views/device_detail_screen.dart';
+import 'package:cybersecurity_its_app/views/recommendations_screen.dart';
 import 'package:cybersecurity_its_app/views/help_screen.dart';
 import 'package:cybersecurity_its_app/views/settings_screen.dart';
 
@@ -50,21 +51,32 @@ final goRouter = GoRouter(
               routes: [
                 // child route
                 GoRoute(
-                  path: 'details',
-                  builder: (context, state) =>
-                      const DetailsScreen(label: 'Select Vendor and Model'),
+                  name: 'details',
+                  path: 'details/:deviceJson',
+                  builder: (context, state) => DetailsScreen(
+                    label: 'Select Vendor and Model',
+                    deviceJson: state.pathParameters['deviceJson'],
+                    ),
+                  routes: [
+                    GoRoute(
+                      name: 'opcontext',
+                      path: 'opcontext',
+                      builder: (context, state) => OpContextScreen(
+                        label: "label",
+                        deviceJson: state.pathParameters['deviceJson'],
+                      ),
                       routes: [
                         GoRoute(
-                          name: 'opcontext',
-                          path: 'opcontext/:vendor/:deviceType/:model',
-                          builder: (context, state) => OpContextScreen(
+                          name: 'recommendations',
+                          path: 'recommendations',
+                          builder: (context, state) => RecommendationsScreen(
                             label: "label",
-                            vendor: state.pathParameters['vendor'],
-                            deviceType: state.pathParameters['deviceType'],
-                            model: state.pathParameters['model'],
+                            deviceJson: state.pathParameters['deviceJson'],
                           )
                         )
                       ]
+                    )
+                  ]
                 ),
               ],
             ),
