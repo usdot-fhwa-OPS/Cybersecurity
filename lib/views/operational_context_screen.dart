@@ -1,3 +1,4 @@
+import 'package:cybersecurity_its_app/models/device_model.dart';
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,13 +32,10 @@ class _OpContextScreenState extends State<OpContextScreen> {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
-    Map<String, dynamic> decodedJSON = jsonDecode(widget.deviceJson!);
-    Map<String, dynamic> securityRecommendations = {...decodedJSON};
-    securityRecommendations.remove("device");
-    securityRecommendations.remove("id");
-    securityRecommendations.remove("connectionType");
-    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+    final decodedDevice = jsonDecode(widget.deviceJson!);
+    ITSDevice device = ITSDevice.fromJson(decodedDevice);
 
+     print(device.securityRecommendations);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,7 +55,7 @@ class _OpContextScreenState extends State<OpContextScreen> {
             child: ElevatedButton(
               style: style,
               //TODO: pass typeController.text and useController.text via onPressed to the Security Configurations page
-              onPressed: () => context.goNamed('recommendations', pathParameters: {'deviceJson': device.toJson().toString()}),
+              onPressed: () => context.goNamed('recommendations', pathParameters: {'deviceJson': jsonEncode(device.toJson())}),
               child: const Text('Begin Secure Configuration'),
             ),
           ),
