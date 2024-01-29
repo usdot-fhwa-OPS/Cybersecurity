@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +6,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-
-import '../utils/device.dart';
 import '../utils/zoom_info.dart';
 import '../models/device_model.dart';
 /// Widget for the Home/initial pages in the bottom navigation bar.
@@ -30,20 +27,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final List<String> demoJsons = [
-  //   "{\"id\": 1,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
-  //   "{\"id\": 4,\"device\": {\"vendor\": \"Netgear\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model A2\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
-  //   "{\"id\": 2,\"device\": {\"vendor\": \"Apple\",\"category\": \"Mobile Device\",\"subType\": \"iOS\",\"model\": \"iPhone 2\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
-  //   "{\"id\": 5,\"device\": {\"vendor\": \"Linksys\",\"category\": \"Router\",\"subType\": \"None\",\"model\": \"Model 15\",\"category\": \"Home Routers\",\"description\": \"Router for home uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}",  
-  //   "{\"id\": 3,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Mobile Device\",\"subType\": \"Android\",\"model\": \"Pixel\",\"category\": \"Mobile Devices\",\"description\": \"Phone for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
-  //   "{\"id\": 6,\"device\": {\"vendor\": \"Samsung\",\"category\": \"Camera\",\"subType\": \"Mini\",\"model\": \"Mini 15\",\"category\": \"Cameras\",\"description\": \"Camera for basic uses\",\"imageUrl\":\"http://4.bp.blogspot.com/-15Zqijz3gus/T9_sVY_m-TI/AAAAAAAAEzY/nNZZ33CQnGI/s400/Apple_iPhone_4.jpg\"},\"connectionType\": {\"Wifi\": true},\"\": {\"Wifi\": true}, \"passwordSettings\": {\"rotate\": 90, \"complexity\": true, \"length\": 10, \"expiryPeriod\": 90}, \"serverPortSettings\": {\"http\": 1, \"https\": 2, \"tcpPort\": 10}}", 
-  //  ];
 
   final _userEditTextController = TextEditingController();
   Set<String> categories = <String>{};
-  Map<int, Device> recentSearches = {};
+  Map<int, ITSDevice> recentSearches = {};
 
   late final Map<String, dynamic> _parsedJson;
+
+  late Future<List<ITSDevice>> data;
+
+  @override
+  void initState() {
+    super.initState(); 
+    data = getDevicesFromApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,75 +66,75 @@ class _HomeScreenState extends State<HomeScreen> {
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
       ),
       body: FutureBuilder(
-        future: getDevicesFromApi(),
+        future: data,
         builder: (context, AsyncSnapshot<List<ITSDevice>> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Column(
               children: [
                 // Search
-                // Padding(
-                //   padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
-                //   child: DropdownSearch<ITSDevice>(
-                //     items: snapshot.data ?? List.empty(),
-                //     itemAsString: (ITSDevice u) => u.deviceAsString(),
-                //     dropdownDecoratorProps: const DropDownDecoratorProps(
-                //       dropdownSearchDecoration: InputDecoration(
-                //         hintText: "Search",
-                //         border: OutlineInputBorder(),
-                //         prefixIcon: Icon(Icons.search)
-                //       ),
-                //     ),
-                //     dropdownButtonProps: const DropdownButtonProps(
-                //       icon: Icon(Icons.search),
-                //     ),
-                //     onChanged: (ITSDevice? d) => selectSearchDevice(d!), 
-                //     popupProps: PopupProps.dialog(
-                //       itemBuilder: (context, item, isSelected) {
-                //         return Container(
-                //           decoration: const BoxDecoration(
-                //             border: Border(
-                //               bottom: BorderSide(width: .5, color: Colors.grey),
-                //             ),
-                //           ),
-                //           child: Padding(
-                //             padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
-                //             child: Row(
-                //               children: [
-                //                 if(recentSearches.keys.contains(item.id)) const Padding(
-                //                   padding: EdgeInsets.only(right:10.0),
-                //                   child: Icon(Icons.schedule, color: Colors.grey, size: 25.0),
-                //                 ) else const SizedBox(width: 10.0),
-                //                 Text(item.deviceAsString()), 
-                //                 const Spacer(),
-                //                 const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
+                Padding(
+                  padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
+                  child: DropdownSearch<ITSDevice>(
+                    items: snapshot.data ?? List.empty(),
+                    itemAsString: (ITSDevice u) => u.deviceAsString(),
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Search",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.search)
+                      ),
+                    ),
+                    dropdownButtonProps: const DropdownButtonProps(
+                      icon: Icon(null),
+                    ),
+                    onChanged: (ITSDevice? d) => selectSearchDevice(d!),
+                    popupProps: PopupProps.dialog(
+                      itemBuilder: (context, item, isSelected) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(width: .5, color: Colors.grey),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
+                            child: Row(
+                              children: [
+                                if(recentSearches.keys.contains(item.id)) const Padding(
+                                  padding: EdgeInsets.only(right:10.0),
+                                  child: Icon(Icons.schedule, color: Colors.grey, size: 25.0),
+                                ) else const SizedBox(width: 10.0),
+                                Text(item.deviceAsString()), 
+                                const Spacer(),
+                                const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
                                 
-                //               ],
-                //             ),
-                //           ),
-                //         );
-                //       },
-                //       showSearchBox: true,
-                //       fit: FlexFit.loose,
-                //       searchFieldProps: TextFieldProps(
-                //         controller: _userEditTextController,         
-                //         autofocus: true,
-                //         decoration: InputDecoration(
-                //           hintText: "Search",
-                //           prefixIcon: GestureDetector(
-                //             onTap: () => Navigator.pop(context, true),
-                //             child: const Icon(Icons.arrow_back)
-                //           ),
-                //           suffixIcon:
-                //           GestureDetector(
-                //             onTap: () => _userEditTextController.clear(),
-                //             child: const Icon(Icons.cancel, color: Colors.black12)
-                //           ),
-                //           border: const OutlineInputBorder()
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                //  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      showSearchBox: true,
+                      fit: FlexFit.loose,
+                      searchFieldProps: TextFieldProps(
+                        controller: _userEditTextController,         
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Search",
+                          prefixIcon: GestureDetector(
+                            onTap: () => Navigator.pop(context, true),
+                            child: const Icon(Icons.arrow_back)
+                          ),
+                          suffixIcon:
+                          GestureDetector(
+                            onTap: () => _userEditTextController.clear(),
+                            child: const Icon(Icons.cancel, color: Colors.black12)
+                          ),
+                          border: const OutlineInputBorder()
+                        ),
+                      ),
+                    ),
+                  ),
+                 ),
                 
                 // List View
                 Expanded(
@@ -160,7 +157,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<List<ITSDevice>> getDevicesFromApi() async {
     try {
-     
+      //recent search results
+      recentSearches.clear(); 
+      String savedRecentSearches = "";
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+      List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
+      if (savedRecentSearches.isNotEmpty) {
+        for (dynamic d in recentSearchesList) {
+          ITSDevice device = ITSDevice.fromJson(d);
+          recentSearches[device.id] = device;
+        }
+      }
+
+      List<ITSDevice> finalDevicesList = List.from(recentSearches.values); 
+
+
+      //api results
       final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
       final idToken = session.userPoolTokensResult.value.idToken.raw;
       final restOperation = Amplify.API.get(
@@ -174,38 +188,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
       _parsedJson = jsonDecode(decodedResponse);
       final List<dynamic> apiData = _parsedJson['Items'] as List<dynamic>;
-      return apiData.map((json) => ITSDevice.fromJson(json)).toList();
+      
+      for (dynamic json in apiData) {
+        ITSDevice device = ITSDevice.fromJson(json);
+        if(!recentSearches.keys.contains(device.id)){
+          finalDevicesList.add(device);
+        }
+      }
+
+      return finalDevicesList;
+      //return apiData.map((json) => ITSDevice.fromJson(json)).toList();
     } on ApiException catch (e) {
       throw Exception('Get call failed: $e');
-    }
-
-    
+    }    
   }
+
   // Future<List<ITSDevice>> getDevices(List<dynamic> demoJsons) async {
+    // recentSearches.clear();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String savedRecentSearches = "";
+    // savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
 
-  //   recentSearches.clear();
-
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String savedRecentSearches = "";
-
-  //   savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-
-  //   if (savedRecentSearches != ""){
-      
-     
-  //     // List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
-  
-       
-  //     // for(dynamic d in recentSearchesDynamic){
-
-          
-  //     //   Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
-
-  //     //   if(!recentSearches.keys.contains(device.id)){
-  //     //     recentSearches[device.id] = device;
-  //     //   }
-  //     // }
-  //   }
+    // if (savedRecentSearches != ""){
+    //   List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
+    //   for(dynamic d in recentSearchesDynamic){
+    //     Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
+    //     if(!recentSearches.keys.contains(device.id)){
+    //       recentSearches[device.id] = device;
+    //     }
+    //   }
+    // }
 
   //   List<ITSDevice> devices = List.from(recentSearches.values);
   //   // for (String json in demoJsons){
@@ -224,34 +236,35 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
   
 
-  void updateRecentDevices(Device d) async {
-    // Map<int, Device> newList = {};
-    // newList[d.id] = d;
-    // int index = 1;
-    // for (int key in recentSearches.keys){
-    //   if(index < 3 && key != d.id){
-    //     newList[key] = recentSearches[key]!;
-    //   }
-    //   index++;
-    // }
-    // newList[d.id] = d;
-    // recentSearches = Map.from(newList);
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('recentSearchesList', jsonEncode(recentSearches.values.toList()));
-    setState(() {});
+  void updateRecentDevices(ITSDevice d) async {
+    Map<int, ITSDevice> newList = {};
+     newList[d.id] = d;
+    int index = 1;
+    for (int key in recentSearches.keys){
+      if(index < 3 && key != d.id){
+        newList[key] = recentSearches[key]!;
+      }
+      index++;
+    }
+    newList[d.id] = d;
+    recentSearches = Map.from(newList);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('recentSearchesList', jsonEncode(recentSearches.values.toList()));
+    
   }
 
   void selectSearchDevice(ITSDevice d){
-    //updateRecentDevices(d);
-    //context.goNamed('details', pathParameters: {'deviceJson': d.toJson().toString()});
+    updateRecentDevices(d);
+    context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(d.toJson())});
   }
 
   int getCategories(List<ITSDevice> devices){
-    //print(devices);
+    
     for (ITSDevice device in devices){
       categories.add(device.deviceType);
     } 
-    //print(categories);
+    
     return categories.length;
   }
 
