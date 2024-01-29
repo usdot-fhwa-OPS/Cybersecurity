@@ -805,7 +805,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-<<<<<<< HEAD
   sprintf:
     dependency: transitive
     description:
@@ -814,8 +813,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-=======
->>>>>>> 84248f02f25e16d200675d5719822187216476ae
   sqlite3:
     dependency: transitive
     description:
@@ -977,10 +974,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-<<<<<<< HEAD
   dart: ">=3.2.0 <4.0.0"
   flutter: ">=3.16.0"
-=======
-  dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=3.10.0"
->>>>>>> 84248f02f25e16d200675d5719822187216476ae
