@@ -4,11 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import '../utils/zoom_info.dart';
 import '../models/devices.dart';
 import '../models/devices_repository.dart';
+
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatefulWidget {
   /// Creates a HomeScreen
@@ -150,86 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  // Future<List<ITSDevice>> getDevicesFromApi() async {
-  //   try {
-  //     //recent search results
-  //     recentSearches.clear(); 
-  //     String savedRecentSearches = "";
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-  //     List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
-  //     if (savedRecentSearches.isNotEmpty) {
-  //       for (dynamic d in recentSearchesList) {
-  //         ITSDevice device = ITSDevice.fromJson(d);
-  //         recentSearches[device.id] = device;
-  //       }
-  //     }
-
-  //     List<ITSDevice> finalDevicesList = List.from(recentSearches.values); 
-
-
-  //     //api results
-  //     final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
-  //     final idToken = session.userPoolTokensResult.value.idToken.raw;
-  //     final restOperation = Amplify.API.get(
-  //       'requestuserdevices',
-  //       headers: {
-  //         'authorization': idToken
-  //       },
-  //     );
-  //     final response = await restOperation.response;
-  //     final decodedResponse = response.decodeBody().toString();
-
-  //     _parsedJson = jsonDecode(decodedResponse);
-  //     final List<dynamic> apiData = _parsedJson['Items'] as List<dynamic>;
-      
-  //     for (dynamic json in apiData) {
-  //       ITSDevice device = ITSDevice.fromJson(json);
-  //       if(!recentSearches.keys.contains(device.id)){
-  //         finalDevicesList.add(device);
-  //       }
-  //     }
-
-  //     return finalDevicesList;
-  //     //return apiData.map((json) => ITSDevice.fromJson(json)).toList();
-  //   } on ApiException catch (e) {
-  //     throw Exception('Get call failed: $e');
-  //   }    
-  // }
-
-  // Future<List<ITSDevice>> getDevices(List<dynamic> demoJsons) async {
-    // recentSearches.clear();
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String savedRecentSearches = "";
-    // savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-
-    // if (savedRecentSearches != ""){
-    //   List<dynamic> recentSearchesDynamic = jsonDecode(savedRecentSearches);
-    //   for(dynamic d in recentSearchesDynamic){
-    //     Device device = Device.fromJson(d["device"], d["id"], d["connectionType"], securityRecommendations);
-    //     if(!recentSearches.keys.contains(device.id)){
-    //       recentSearches[device.id] = device;
-    //     }
-    //   }
-    // }
-
-  //   List<ITSDevice> devices = List.from(recentSearches.values);
-  //   // for (String json in demoJsons){
-  //   //   Map<String, dynamic> decodedJSON = jsonDecode(json);
-  //   // Map<String, dynamic> securityRecommendations = {...decodedJSON};
-  //   // securityRecommendations.remove("device");
-  //   // securityRecommendations.remove("id");
-  //   // securityRecommendations.remove("connectionType");
-  //   // Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
-
-  //   //   if (!recentSearches.keys.contains(device.id)){
-  //   //     devices.add(device);
-  //   //   }
-  //   // }
-  //   return devices;
-  // }
   
   Future<List<ITSDevice>> getSearchList() async {
     recentSearches.clear(); 
@@ -250,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     List<ITSDevice> searchList = List.from(recentSearches.values); 
+    
     List<ITSDevice> apiList = await DevicesRepository().getDevices();
 
     for (ITSDevice device in apiList) {

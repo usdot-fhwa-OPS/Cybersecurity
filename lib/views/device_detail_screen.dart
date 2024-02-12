@@ -2,7 +2,6 @@ import 'package:cybersecurity_its_app/models/devices.dart';
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cybersecurity_its_app/utils/device.dart';
 import 'dart:convert';
 
 /// The details screen for selected device.
