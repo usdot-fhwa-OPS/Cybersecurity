@@ -1,4 +1,4 @@
-import 'package:cybersecurity_its_app/models/device_model.dart';
+import 'package:cybersecurity_its_app/models/devices.dart';
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

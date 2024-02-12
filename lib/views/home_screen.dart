@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import '../utils/zoom_info.dart';
-import '../models/device_model.dart';
+import '../models/devices.dart';
+import '../models/devices_repository.dart';
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatefulWidget {
   /// Creates a HomeScreen
@@ -27,19 +28,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _userEditTextController = TextEditingController();
+  
   Set<String> categories = <String>{};
-  Map<int, ITSDevice> recentSearches = {};
 
-  late final Map<String, dynamic> _parsedJson;
-
+  Map<String, ITSDevice> recentSearches = {};
+  
   late Future<List<ITSDevice>> data;
 
   @override
   void initState() {
-    super.initState(); 
-    data = getDevicesFromApi();
+    super.initState();
+    data = DevicesRepository().getDevices();
   }
 
   @override
@@ -65,143 +65,139 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         titleTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
       ),
-      body: FutureBuilder(
-        future: data,
-        builder: (context, AsyncSnapshot<List<ITSDevice>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                // Search
-                Padding(
-                  padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
-                  child: DropdownSearch<ITSDevice>(
-                    items: snapshot.data ?? List.empty(),
-                    itemAsString: (ITSDevice u) => u.deviceAsString(),
-                    dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                        hintText: "Search",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.search)
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
+            child: DropdownSearch<ITSDevice>(
+              asyncItems: (String filter) => getSearchList(),
+              itemAsString: (ITSDevice u) => u.deviceAsString(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  hintText: "Search",
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search)
+                ),
+              ),
+              dropdownButtonProps: const DropdownButtonProps(
+                icon: Icon(null),
+              ),
+              onChanged: (ITSDevice? d) => selectSearchDevice(d!),
+              popupProps: PopupProps.dialog(
+                itemBuilder: (context, item, isSelected) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: .5, color: Colors.grey),
                       ),
                     ),
-                    dropdownButtonProps: const DropdownButtonProps(
-                      icon: Icon(null),
-                    ),
-                    onChanged: (ITSDevice? d) => selectSearchDevice(d!),
-                    popupProps: PopupProps.dialog(
-                      itemBuilder: (context, item, isSelected) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(width: .5, color: Colors.grey),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
-                            child: Row(
-                              children: [
-                                if(recentSearches.keys.contains(item.id)) const Padding(
-                                  padding: EdgeInsets.only(right:10.0),
-                                  child: Icon(Icons.schedule, color: Colors.grey, size: 25.0),
-                                ) else const SizedBox(width: 10.0),
-                                Text(item.deviceAsString()), 
-                                const Spacer(),
-                                const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
-                                
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      showSearchBox: true,
-                      fit: FlexFit.loose,
-                      searchFieldProps: TextFieldProps(
-                        controller: _userEditTextController,         
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          prefixIcon: GestureDetector(
-                            onTap: () => Navigator.pop(context, true),
-                            child: const Icon(Icons.arrow_back)
-                          ),
-                          suffixIcon:
-                          GestureDetector(
-                            onTap: () => _userEditTextController.clear(),
-                            child: const Icon(Icons.cancel, color: Colors.black12)
-                          ),
-                          border: const OutlineInputBorder()
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
+                      child: Row(
+                        children: [
+                          if(recentSearches.keys.contains(item.deviceModel)) const Padding(
+                            padding: EdgeInsets.only(right:10.0),
+                            child: Icon(Icons.schedule, color: Colors.grey, size: 25.0),
+                          ) else const SizedBox(width: 10.0),
+                          Text(item.deviceAsString()), 
+                          const Spacer(),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
+                          
+                        ],
                       ),
                     ),
+                  );
+                },
+                showSearchBox: true,
+                fit: FlexFit.loose,
+                searchFieldProps: TextFieldProps(
+                  controller: _userEditTextController,         
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: "Search",
+                    prefixIcon: GestureDetector(
+                      onTap: () => Navigator.pop(context, true),
+                      child: const Icon(Icons.arrow_back)
+                    ),
+                    suffixIcon:
+                    GestureDetector(
+                      onTap: () => _userEditTextController.clear(),
+                      child: const Icon(Icons.cancel, color: Colors.black12)
+                    ),
+                    border: const OutlineInputBorder()
                   ),
-                 ),
-                
-                // List View
-                Expanded(
-                  child: 
-                    ListView.builder(
-                      itemCount: getCategories(snapshot.data!),
-                      itemBuilder: (context, index) {
-                        return Category(label: categories.elementAt(index), devices: snapshot.data!.where((device) => device.deviceType == categories.elementAt(index)).toList());
-                      }
-                    )
-                  ),
-              ],
-            );
-          } 
-          return const Center(child: CircularProgressIndicator());
-        },
+                ),
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: data,
+            builder: (context, AsyncSnapshot<List<ITSDevice>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: getCategories(snapshot.data!),
+                    itemBuilder: (context, index) {
+                      return Category(label: categories.elementAt(index), devices: snapshot.data!.where((device) => device.deviceType == categories.elementAt(index)).toList());
+                    }
+                  )
+                );
+              } 
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ],
       ),
     );
   }
 
-  Future<List<ITSDevice>> getDevicesFromApi() async {
-    try {
-      //recent search results
-      recentSearches.clear(); 
-      String savedRecentSearches = "";
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+  // Future<List<ITSDevice>> getDevicesFromApi() async {
+  //   try {
+  //     //recent search results
+  //     recentSearches.clear(); 
+  //     String savedRecentSearches = "";
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-      List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
-      if (savedRecentSearches.isNotEmpty) {
-        for (dynamic d in recentSearchesList) {
-          ITSDevice device = ITSDevice.fromJson(d);
-          recentSearches[device.id] = device;
-        }
-      }
+  //     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+  //     List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
+  //     if (savedRecentSearches.isNotEmpty) {
+  //       for (dynamic d in recentSearchesList) {
+  //         ITSDevice device = ITSDevice.fromJson(d);
+  //         recentSearches[device.id] = device;
+  //       }
+  //     }
 
-      List<ITSDevice> finalDevicesList = List.from(recentSearches.values); 
+  //     List<ITSDevice> finalDevicesList = List.from(recentSearches.values); 
 
 
-      //api results
-      final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
-      final idToken = session.userPoolTokensResult.value.idToken.raw;
-      final restOperation = Amplify.API.get(
-        'requestuserdevices',
-        headers: {
-          'authorization': idToken
-        },
-      );
-      final response = await restOperation.response;
-      final decodedResponse = response.decodeBody().toString();
+  //     //api results
+  //     final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
+  //     final idToken = session.userPoolTokensResult.value.idToken.raw;
+  //     final restOperation = Amplify.API.get(
+  //       'requestuserdevices',
+  //       headers: {
+  //         'authorization': idToken
+  //       },
+  //     );
+  //     final response = await restOperation.response;
+  //     final decodedResponse = response.decodeBody().toString();
 
-      _parsedJson = jsonDecode(decodedResponse);
-      final List<dynamic> apiData = _parsedJson['Items'] as List<dynamic>;
+  //     _parsedJson = jsonDecode(decodedResponse);
+  //     final List<dynamic> apiData = _parsedJson['Items'] as List<dynamic>;
       
-      for (dynamic json in apiData) {
-        ITSDevice device = ITSDevice.fromJson(json);
-        if(!recentSearches.keys.contains(device.id)){
-          finalDevicesList.add(device);
-        }
-      }
+  //     for (dynamic json in apiData) {
+  //       ITSDevice device = ITSDevice.fromJson(json);
+  //       if(!recentSearches.keys.contains(device.id)){
+  //         finalDevicesList.add(device);
+  //       }
+  //     }
 
-      return finalDevicesList;
-      //return apiData.map((json) => ITSDevice.fromJson(json)).toList();
-    } on ApiException catch (e) {
-      throw Exception('Get call failed: $e');
-    }    
-  }
+  //     return finalDevicesList;
+  //     //return apiData.map((json) => ITSDevice.fromJson(json)).toList();
+  //   } on ApiException catch (e) {
+  //     throw Exception('Get call failed: $e');
+  //   }    
+  // }
 
   // Future<List<ITSDevice>> getDevices(List<dynamic> demoJsons) async {
     // recentSearches.clear();
@@ -235,23 +231,52 @@ class _HomeScreenState extends State<HomeScreen> {
   //   return devices;
   // }
   
+  Future<List<ITSDevice>> getSearchList() async {
+    recentSearches.clear(); 
+    String savedRecentSearches = "";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
+    List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
+    if (savedRecentSearches.isNotEmpty) {
+      for (dynamic d in recentSearchesList) {
+        
+        ITSDevice device = ITSDevice.fromJson(d);
+        
+        if(!recentSearches.values.contains(device)) {
+          recentSearches[device.deviceModel] = device;
+        }
+      }
+    }
+
+    List<ITSDevice> searchList = List.from(recentSearches.values); 
+    List<ITSDevice> apiList = await DevicesRepository().getDevices();
+
+    for (ITSDevice device in apiList) {
+      if(!recentSearches.keys.contains(device.deviceModel)) {
+        searchList.add(device);
+      }
+    }
+    
+    return searchList;
+  }
 
   void updateRecentDevices(ITSDevice d) async {
-    Map<int, ITSDevice> newList = {};
-     newList[d.id] = d;
+    Map<String, ITSDevice> newList = {};
+    newList[d.deviceModel] = d;
     int index = 1;
-    for (int key in recentSearches.keys){
-      if(index < 3 && key != d.id){
+    for (String key in recentSearches.keys){
+      if(index < 3 && key != d.deviceModel){
         newList[key] = recentSearches[key]!;
       }
       index++;
     }
-    newList[d.id] = d;
+    newList[d.deviceModel] = d;
     recentSearches = Map.from(newList);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('recentSearchesList', jsonEncode(recentSearches.values.toList()));
-    
+    setState(() {});
   }
 
   void selectSearchDevice(ITSDevice d){
@@ -260,14 +285,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   int getCategories(List<ITSDevice> devices){
-    
     for (ITSDevice device in devices){
       categories.add(device.deviceType);
     } 
-    
+
     return categories.length;
   }
-
 }
 
 
