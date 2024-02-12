@@ -170,7 +170,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List<ITSDevice> searchList = List.from(recentSearches.values); 
     
-    List<ITSDevice> apiList = await DevicesRepository().getDevices();
+    final String? decodedResponse = prefs.getString('apiData');
+    final parsedJson = jsonDecode(decodedResponse!);
+    final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+
+    final List<ITSDevice> apiList = apiData.map((json) => ITSDevice.fromJson(json)).toList();
 
     for (ITSDevice device in apiList) {
       if(!recentSearches.keys.contains(device.deviceModel)) {
