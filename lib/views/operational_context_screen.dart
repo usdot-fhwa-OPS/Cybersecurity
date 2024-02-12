@@ -2,11 +2,8 @@ import 'package:cybersecurity_its_app/models/devices.dart';
 import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cybersecurity_its_app/utils/device.dart';
 import 'dart:convert';
 
-
-//TODO -- Refactor with Provider
 class OpContextScreen extends StatefulWidget {
   const OpContextScreen({required this.label, this.deviceJson, Key? key})
     : super(key: key);
@@ -34,8 +31,6 @@ class _OpContextScreenState extends State<OpContextScreen> {
 
     final decodedDevice = jsonDecode(widget.deviceJson!);
     ITSDevice device = ITSDevice.fromJson(decodedDevice);
-
-     print(device.securityRecommendations);
 
     return Scaffold(
       appBar: AppBar(
