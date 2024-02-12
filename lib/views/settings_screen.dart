@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
-import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +24,6 @@ class SettingsScreen extends StatefulWidget {
 class SettingsScreenState extends State<SettingsScreen> {
   String? _userEmail;
   String? _userGroup;
-
-  logoutButtonPressed(BuildContext context) {
-    Provider.of<LoginInfo>(context, listen: false).logout();
-  }
 
   Future<void> signOutCurrentUser() async {
     try {

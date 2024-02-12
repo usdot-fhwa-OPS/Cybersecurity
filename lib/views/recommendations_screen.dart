@@ -1,6 +1,5 @@
-import 'package:cybersecurity_its_app/widgets/device_dropdown.dart';
+import 'package:cybersecurity_its_app/models/devices.dart';
 import 'package:flutter/material.dart';
-import 'package:cybersecurity_its_app/utils/device.dart';
 import 'dart:convert';
 
 
@@ -26,15 +25,11 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   @override
   Widget build(BuildContext context) {
 
-    Map<String, dynamic> decodedJSON = jsonDecode(widget.deviceJson!);
-    Map<String, dynamic> securityRecommendations = {...decodedJSON};
-    securityRecommendations.remove("device");
-    securityRecommendations.remove("id");
-    securityRecommendations.remove("connectionType");
-    Device device = Device.fromJson(decodedJSON["device"], decodedJSON["id"], decodedJSON["connectionType"], securityRecommendations);
+    final decodedDevice = jsonDecode(widget.deviceJson!);
+    ITSDevice device = ITSDevice.fromJson(decodedDevice);
     
     final List<DropdownMenuEntry<String>> dropdownEntries = <DropdownMenuEntry<String>>[];
-    for (final item in device.securityRecommendations.keys.toList()) {
+    for (final item in device.securityRecommendations!.keys.toList()) {
       dropdownEntries.add(DropdownMenuEntry<String>(value: item, label: item));
     }
 
@@ -60,7 +55,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                   padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
                   child: DropdownMenu<String>(
                     width: 250.0,
-                    initialSelection: device.securityRecommendations.keys.toList()[0],
+                    initialSelection: device.securityRecommendations!.keys.toList()[0],
                     controller: recommendationController,
                     dropdownMenuEntries: dropdownEntries,
                     onSelected: (String? item) {
@@ -73,7 +68,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               ],
             )
           ),
-          updateSecurityRecommendations(securityRecommendations)
+          updateSecurityRecommendations(device.securityRecommendations!)
         ],
       ),
     );

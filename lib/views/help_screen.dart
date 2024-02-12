@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
 import 'package:flutter/material.dart';

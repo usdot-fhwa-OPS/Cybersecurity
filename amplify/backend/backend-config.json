@@ -40,6 +40,70 @@
           "resourceName": "opscybersecurityapp"
         }
       ]
+    },
+    "AMPLIFY_storage_ocsDevTable_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ocsDevTable_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ocsDevTable"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "ocsDevTable": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
     }
   }
 }
