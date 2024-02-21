@@ -28,6 +28,8 @@ class SettingsScreenState extends State<SettingsScreen> {
   Future<void> signOutCurrentUser() async {
     try {
       final result = await Amplify.Auth.signOut();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
       if (result is CognitoCompleteSignOut && mounted) {
         safePrint('Sign out completed successfully');
         context.go('/Login');

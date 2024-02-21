@@ -154,7 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
     recentSearches.clear(); 
     String savedRecentSearches = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
     
     if (savedRecentSearches.isNotEmpty) {
@@ -174,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final String? decodedResponse = prefs.getString('apiData');
     final parsedJson = jsonDecode(decodedResponse!);
     final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
-
     final List<ITSDevice> apiList = apiData.map((json) => ITSDevice.fromJson(json)).toList();
 
     for (ITSDevice device in apiList) {
