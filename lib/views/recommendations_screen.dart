@@ -55,6 +55,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                   padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
                   child: DropdownMenu<String>(
                     width: 250.0,
+                    menuHeight: 500.0,
                     initialSelection: device.securityRecommendations!.keys.toList()[0],
                     controller: recommendationController,
                     dropdownMenuEntries: dropdownEntries,

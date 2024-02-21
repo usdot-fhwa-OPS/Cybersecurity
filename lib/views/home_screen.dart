@@ -156,8 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-    List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
+    
     if (savedRecentSearches.isNotEmpty) {
+      List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
       for (dynamic d in recentSearchesList) {
         
         ITSDevice device = ITSDevice.fromJson(d);
