@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Map<String, ITSDevice> recentSearches = {};
   
-  late Future<List<ITSDevice>> data;
 
   @override
   void initState() {

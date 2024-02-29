@@ -5,7 +5,7 @@ import 'package:cybersecurity_its_app/models/devices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DevicesRepository { 
-  Future<List<ITSDevice>> getDevices() async {
+  Future<void> getDevices() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       //api results
@@ -24,10 +24,10 @@ class DevicesRepository {
       final decodedResponse = response.decodeBody().toString();
       await prefs.setString('apiData', decodedResponse);
       
-      final parsedJson = jsonDecode(decodedResponse);
-      final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+      // final parsedJson = jsonDecode(decodedResponse);
+      // final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
       
-      return apiData.map((json) => ITSDevice.fromJson(json)).toList();
+      // return apiData.map((json) => ITSDevice.fromJson(json)).toList();
       
     } on ApiException catch (e) {
       throw Exception('Get call failed: $e');
