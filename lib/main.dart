@@ -1,16 +1,21 @@
 import 'dart:ui';
-
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+
+// Flutter Utils
 import 'package:cybersecurity_its_app/utils/router_configuration.dart';
 import 'package:cybersecurity_its_app/utils/login_info.dart';
 import 'package:cybersecurity_its_app/utils/zoom_info.dart';
-import 'package:provider/provider.dart';
+
+// Firebase Packages
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
 
+// State Management Providers
+import 'package:provider/provider.dart';
 import 'package:cybersecurity_its_app/providers/button_enabler_provider.dart';
 import 'package:cybersecurity_its_app/providers/issue_checkbox_provider.dart';
+import 'package:cybersecurity_its_app/providers/devices_provider.dart';
 
 // Amplify Flutter Packages
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -84,6 +89,8 @@ class AppProviders extends StatelessWidget {
                 create: (_) => ButtonEnabler()),
             ChangeNotifierProvider(
                 create:(_) => IssueCheckboxList()),
+            ChangeNotifierProvider(
+                create: (_) => DevicesProvider()),
           ],
         child: MyApp(),
       );

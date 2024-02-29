@@ -23,12 +23,12 @@ class DevicesRepository {
       //this is a string we can potentially store in sharedpreferences. to later decode
       final decodedResponse = response.decodeBody().toString();
       await prefs.setString('apiData', decodedResponse);
-
+      
       final parsedJson = jsonDecode(decodedResponse);
       final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
       
       return apiData.map((json) => ITSDevice.fromJson(json)).toList();
-
+      
     } on ApiException catch (e) {
       throw Exception('Get call failed: $e');
     } 

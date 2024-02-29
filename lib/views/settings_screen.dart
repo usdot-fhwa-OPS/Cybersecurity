@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:cybersecurity_its_app/providers/devices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       await preferences.clear();
       if (result is CognitoCompleteSignOut && mounted) {
         safePrint('Sign out completed successfully');
+        Provider.of<DevicesProvider>(context, listen: false).clearDevicesList();
         context.go('/Login');
       } else if (result is CognitoFailedSignOut) {
         safePrint('Error signing user out: ${result.exception.message}');

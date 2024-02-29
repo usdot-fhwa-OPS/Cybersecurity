@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/zoom_info.dart';
 import '../models/devices.dart';
-import '../models/devices_repository.dart';
+import '../providers/devices_provider.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatefulWidget {
@@ -38,12 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    data = DevicesRepository().getDevices();
+    Provider.of<DevicesProvider>(context, listen: false).fetchDevicesList();
   }
 
   @override
   Widget build(BuildContext context) {
 
+    final devicesList = Provider.of<DevicesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -129,22 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          FutureBuilder(
-            future: data,
-            builder: (context, AsyncSnapshot<List<ITSDevice>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Expanded(
+          devicesList.devices!.isNotEmpty && devicesList.devices != null ?
+            Expanded(
                   child: ListView.builder(
-                    itemCount: getCategories(snapshot.data!),
+                    itemCount: getCategories(devicesList.devices!),
                     itemBuilder: (context, index) {
-                      return Category(label: categories.elementAt(index), devices: snapshot.data!.where((device) => device.deviceType == categories.elementAt(index)).toList());
+                      return Category(label: categories.elementAt(index), devices: devicesList.devices!.where((device) => device.deviceType == categories.elementAt(index)).toList());
                     }
                   )
-                );
-              } 
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
+            ) : 
+            const Center (child: CircularProgressIndicator()),
         ],
       ),
     );

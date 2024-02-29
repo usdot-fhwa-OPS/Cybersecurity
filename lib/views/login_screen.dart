@@ -34,13 +34,13 @@ class LoginScreenState extends State<LoginScreen>{
         final result = await Amplify.Auth.fetchUserAttributes();
         final data = {for (var e in result) e.userAttributeKey.key: e.value};
         prefs.setString('userEmail', data['email']!);
+        
 
         //gets user group(s), stores it in local storage
         final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
         final idToken = session.userPoolTokensResult.value;
         final userGroups = idToken.accessToken;
         prefs.setString('userGroup', userGroups.groups.join(','));
-       
         context.go('/Home');
       }
     } on AuthException catch (e) {
@@ -48,6 +48,22 @@ class LoginScreenState extends State<LoginScreen>{
           .showSnackBar(SnackBar(content: Text('Error signing in: ${e.message}'),
           backgroundColor: const Color(0xFFD50000),
           behavior: SnackBarBehavior.floating,));
+    }
+  }
+
+  Future<void> signOutCurrentUser() async {
+    try {
+      final result = await Amplify.Auth.signOut();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+      if (result is CognitoCompleteSignOut && mounted) {
+        safePrint('Sign out completed successfully');
+        context.go('/Login');
+      } else if (result is CognitoFailedSignOut) {
+        safePrint('Error signing user out: ${result.exception.message}');
+      }
+    } catch (e) {
+        safePrint('');
     }
   }
   
@@ -142,6 +158,21 @@ class LoginScreenState extends State<LoginScreen>{
                   ),
                 ),
               ),
+              Padding(
+              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red
+                  ),
+                  onPressed: () {
+                    signOutCurrentUser();
+                  },
+                  child: const Text('Sign Out'),
+                ),
+              ),
+            ),
             ]
           )
       )
