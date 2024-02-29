@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Set<String> categories = <String>{};
 
   Map<String, ITSDevice> recentSearches = {};
-  
 
   @override
   void initState() {

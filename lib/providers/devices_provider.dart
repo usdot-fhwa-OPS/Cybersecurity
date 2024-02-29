@@ -8,16 +8,19 @@ class DevicesProvider with ChangeNotifier {
   List<ITSDevice>? devices = []; 
 
   Future<void> fetchDevicesList() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await DevicesRepository().getDevices();
+    
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     final String? decodedResponse = prefs.getString('apiData');
     final parsedJson = jsonDecode(decodedResponse!);
     final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+    
     devices = apiData.map((json) => ITSDevice.fromJson(json)).toList();
-
     notifyListeners();
   }
 
+  // Clears device list for when a user logs out.
   void clearDevicesList() {
     devices!.clear();
     notifyListeners();
