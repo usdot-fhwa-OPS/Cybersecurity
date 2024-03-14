@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -316,10 +316,15 @@ class DeviceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: 
-                Image.network(
-                  device.imageUrl,
-                  fit: BoxFit.cover,
-                )
+                CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) => Center(
+                  child: CircularProgressIndicator(
+                    value: progress.progress,
+                  ),
+                ),
+                imageUrl:
+                    device.imageUrl,
+              ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
