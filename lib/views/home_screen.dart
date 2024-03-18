@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter/services.dart';
+
+
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/zoom_info.dart';
@@ -67,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left:8.0, right:8.0, top: 12.0, bottom: 12.0),
+            padding: const EdgeInsets.only(left:8.0, right:8, top: 12.0, bottom: 12.0),
             child: DropdownSearch<ITSDevice>(
               asyncItems: (String filter) => getSearchList(),
               itemAsString: (ITSDevice u) => u.deviceAsString(),
@@ -75,11 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 dropdownSearchDecoration: InputDecoration(
                   hintText: "Search",
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search)
+                  prefixIcon: Icon(Icons.search),
+                  
+                    
                 ),
               ),
-              dropdownButtonProps: const DropdownButtonProps(
-                icon: Icon(null),
+              dropdownButtonProps: DropdownButtonProps(
+                icon:
+                GestureDetector(
+                  onTap: () => barcodeScan(),
+                  child: const Icon(Icons.photo_camera)
+                ),
               ),
               onChanged: (ITSDevice? d) => selectSearchDevice(d!),
               popupProps: PopupProps.dialog(
@@ -123,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () => _userEditTextController.clear(),
                       child: const Icon(Icons.cancel, color: Colors.black12)
                     ),
-                    border: const OutlineInputBorder()
                   ),
                 ),
               ),
@@ -156,8 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
-    List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
     if (savedRecentSearches.isNotEmpty) {
+      List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
       for (dynamic d in recentSearchesList) {
         
         ITSDevice device = ITSDevice.fromJson(d);
@@ -179,6 +189,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     
     return searchList;
+  }
+
+  
+  Future<void> barcodeScan() async {
+    String barcodeScanRes;
+    try {
+    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+    if (!mounted) return;
+    setState(() => _userEditTextController.text = barcodeScanRes);
+    
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+   
+
+    
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    
+
   }
 
   void updateRecentDevices(ITSDevice d) async {
@@ -203,6 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
     updateRecentDevices(d);
     context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(d.toJson())});
   }
+    
 
   int getCategories(List<ITSDevice> devices){
     for (ITSDevice device in devices){
