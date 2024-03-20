@@ -203,7 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
         searchList.add(device);
       }
     }
-    
     return searchList;
   }
 
@@ -220,9 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
       int deviceIndex = apiData.indexWhere((f) => f['DeviceModel'] == barcodeScanRes);
       ITSDevice device = ITSDevice.fromJson(apiData[deviceIndex]);
-      context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(device.toJson())});
-     
-      
+      context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(device.toJson())}); 
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     } catch (e) {
@@ -231,12 +228,6 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Color(0xFFD50000),
           behavior: SnackBarBehavior.floating,));
     }
-   
-
-    
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    
-
   }
 
   void updateRecentDevices(ITSDevice d) async {
