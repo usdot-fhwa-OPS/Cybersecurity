@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon:
                 GestureDetector(
                   onTap: () => barcodeScan(),
-                  child: const Icon(Icons.photo_camera)
+                  child: const Icon(Icons.qr_code_scanner)
                 ),
               ),
               onChanged: (ITSDevice? d) => selectSearchDevice(d!),
@@ -195,9 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> barcodeScan() async {
     String barcodeScanRes;
     try {
-    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
     if (!mounted) return;
+    
+    //barcodeScanRes holds the string 
+    print(barcodeScanRes);
     setState(() => _userEditTextController.text = barcodeScanRes);
     
     } on PlatformException {
