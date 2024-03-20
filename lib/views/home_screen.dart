@@ -315,16 +315,15 @@ class DeviceCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: 
-                CachedNetworkImage(
-                progressIndicatorBuilder: (context, url, progress) => Center(
-                  child: CircularProgressIndicator(
-                    value: progress.progress,
+              Expanded(
+                child: CachedNetworkImage(
+                  progressIndicatorBuilder: (context, url, progress) => Center(
+                    child: CircularProgressIndicator(
+                      value: progress.progress,
+                    ),
                   ),
+                  imageUrl: device.imageUrl,
                 ),
-                imageUrl:
-                    device.imageUrl,
-              ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
