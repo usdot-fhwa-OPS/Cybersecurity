@@ -49,6 +49,7 @@ dependencies:
   amplify_auth_cognito: ^1.0.0
   amplify_api: ^1.6.1
   uuid: ^4.2.2
+  cached_network_image: ^3.3.1
 
 flutter_native_splash:
   android: true
