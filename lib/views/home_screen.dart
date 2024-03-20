@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -11,7 +15,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/zoom_info.dart';
 import '../models/devices.dart';
-import '../models/devices_repository.dart';
+import '../providers/devices_provider.dart';
 
 /// Widget for the Home/initial pages in the bottom navigation bar.
 class HomeScreen extends StatefulWidget {
@@ -33,22 +37,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _userEditTextController = TextEditingController();
-  
   Set<String> categories = <String>{};
-
   Map<String, ITSDevice> recentSearches = {};
-  
-  late Future<List<ITSDevice>> data;
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+        },
+      );
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    data = DevicesRepository().getDevices();
+    Provider.of<DevicesProvider>(context, listen: false).fetchDevicesList(isDeviceConnected);
   }
 
   @override
   Widget build(BuildContext context) {
 
+    final devicesList = Provider.of<DevicesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -139,22 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          FutureBuilder(
-            future: data,
-            builder: (context, AsyncSnapshot<List<ITSDevice>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Expanded(
+          devicesList.devices!.isNotEmpty && devicesList.devices != null ?
+            Expanded(
                   child: ListView.builder(
-                    itemCount: getCategories(snapshot.data!),
+                    itemCount: getCategories(devicesList.devices!),
                     itemBuilder: (context, index) {
-                      return Category(label: categories.elementAt(index), devices: snapshot.data!.where((device) => device.deviceType == categories.elementAt(index)).toList());
+                      return Category(label: categories.elementAt(index), devices: devicesList.devices!.where((device) => device.deviceType == categories.elementAt(index)).toList());
                     }
                   )
-                );
-              } 
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
+            ) : 
+            const Center (child: CircularProgressIndicator()),
         ],
       ),
     );
@@ -164,7 +175,6 @@ class _HomeScreenState extends State<HomeScreen> {
     recentSearches.clear(); 
     String savedRecentSearches = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     savedRecentSearches = prefs.getString('recentSearchesList') ?? "";
     if (savedRecentSearches.isNotEmpty) {
       List<dynamic> recentSearchesList = jsonDecode(savedRecentSearches);
@@ -180,7 +190,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List<ITSDevice> searchList = List.from(recentSearches.values); 
     
-    List<ITSDevice> apiList = await DevicesRepository().getDevices();
+    final String? decodedResponse = prefs.getString('apiData');
+    final parsedJson = jsonDecode(decodedResponse!);
+    final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+    final List<ITSDevice> apiList = apiData.map((json) => ITSDevice.fromJson(json)).toList();
 
     for (ITSDevice device in apiList) {
       if(!recentSearches.keys.contains(device.deviceModel)) {
@@ -334,11 +347,15 @@ class DeviceCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: 
-                Image.network(
-                  device.imageUrl,
-                  fit: BoxFit.cover,
-                )
+              Expanded(
+                child: CachedNetworkImage(
+                  progressIndicatorBuilder: (context, url, progress) => Center(
+                    child: CircularProgressIndicator(
+                      value: progress.progress,
+                    ),
+                  ),
+                  imageUrl: device.imageUrl,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
