@@ -93,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: DropdownSearch<ITSDevice>(
               asyncItems: (String filter) => getSearchList(),
               itemAsString: (ITSDevice u) => u.deviceAsString(),
-              dropdownDecoratorProps: const DropDownDecoratorProps(
+              dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
-                  hintText: "Search",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
+                  hintText: _userEditTextController.text.isEmpty ? "Search" : _userEditTextController.text ,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.search),
                   
                     
                 ),
@@ -148,7 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     suffixIcon:
                     GestureDetector(
-                      onTap: () => _userEditTextController.clear(),
+                      onTap: () => {
+                        _userEditTextController.clear(),
+                        setState(() {})
+                      },
                       child: const Icon(Icons.cancel, color: Colors.black12)
                     ),
                   ),
@@ -208,15 +211,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> barcodeScan() async {
     String barcodeScanRes;
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
-    if (!mounted) return;
+      if (!mounted) return;
     
-    //barcodeScanRes holds the string 
-    print(barcodeScanRes);
-    setState(() => _userEditTextController.text = barcodeScanRes);
-    
+      final String? decodedResponse = prefs.getString('apiData');
+      final parsedJson = jsonDecode(decodedResponse!);
+      final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+      int deviceIndex = apiData.indexWhere((f) => f['DeviceModel'] == barcodeScanRes);
+      ITSDevice device = ITSDevice.fromJson(apiData[deviceIndex]);
+      context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(device.toJson())});
+     
+      
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Error: Invalid QR Code'),
+          backgroundColor: Color(0xFFD50000),
+          behavior: SnackBarBehavior.floating,));
     }
    
 
