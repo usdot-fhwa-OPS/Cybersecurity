@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
       barcodeScanRes = 'Failed to get platform version.';
     } catch (e) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Error: Invalid QR Code'),
+          .showSnackBar(const SnackBar(content: Text('Error: Invalid QR code.'),
           backgroundColor: Color(0xFFD50000),
           behavior: SnackBarBehavior.floating,));
     }
