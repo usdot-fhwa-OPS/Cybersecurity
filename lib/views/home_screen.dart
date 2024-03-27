@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    isDeviceConnected = false;
     Provider.of<DevicesProvider>(context, listen: false).fetchDevicesList(isDeviceConnected);
   }
 
@@ -98,8 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintText: _userEditTextController.text.isEmpty ? "Search" : _userEditTextController.text ,
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.search),
-                  
-                    
                 ),
               ),
               dropdownButtonProps: DropdownButtonProps(
@@ -115,19 +114,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     decoration: const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(width: .5, color: Colors.grey),
+                        bottom: BorderSide(width: 1, color: Colors.grey),
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right:15.0, top: 20.0, bottom: 20.0),
+                      padding: const EdgeInsets.only(left: 10.0, right:10.0, top: 20.0, bottom: 20.0),
                       child: Row(
                         children: [
                           if(recentSearches.keys.contains(item.deviceModel)) const Padding(
                             padding: EdgeInsets.only(right:10.0),
                             child: Icon(Icons.schedule, color: Colors.grey, size: 25.0),
                           ) else const SizedBox(width: 10.0),
-                          Text(item.deviceAsString()), 
-                          const Spacer(),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Text(
+                              item.deviceAsString(),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ),
                           const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15.0),
                           
                         ],
@@ -211,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String barcodeScanRes;
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
+       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', false, ScanMode.BARCODE);
       if (!mounted) return;
     
       final String? decodedResponse = prefs.getString('apiData');
@@ -339,7 +343,7 @@ class DeviceCard extends StatelessWidget {
     return GestureDetector(
       onTap:  () => context.goNamed('details', pathParameters: {'deviceJson': jsonEncode(device.toJson())}),
       child: Card(
-        elevation: 3,
+        elevation: 4,
         shape: const RoundedRectangleBorder(
           side: BorderSide(
             color: Colors.grey,
@@ -347,7 +351,8 @@ class DeviceCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
         child: SizedBox(
-          width: 120 * MediaQuery.of(context).textScaleFactor,
+          width: 125 * MediaQuery.of(context).textScaleFactor,
+          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -359,6 +364,11 @@ class DeviceCard extends StatelessWidget {
                     ),
                   ),
                   imageUrl: device.imageUrl,
+                  alignment: Alignment.center,
+                  height: 250,
+                  width: 350,
+          fit: BoxFit.fill,
+                  
                 ),
               ),
               Padding(
@@ -373,6 +383,8 @@ class DeviceCard extends StatelessWidget {
                 child: Text(
                   device.description,
                   style: const TextStyle(fontSize: 13),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

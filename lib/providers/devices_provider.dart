@@ -8,9 +8,9 @@ class DevicesProvider with ChangeNotifier {
   List<ITSDevice>? devices = []; 
 
   Future<void> fetchDevicesList(bool isConnected) async {
-    if (isConnected) {
-      await DevicesRepository().getDevices();
-    }
+    
+    await DevicesRepository().getDevices();
+    
     
     SharedPreferences prefs = await SharedPreferences.getInstance();
     

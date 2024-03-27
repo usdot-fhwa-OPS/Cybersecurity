@@ -51,22 +51,6 @@ class LoginScreenState extends State<LoginScreen>{
     }
   }
 
-  Future<void> signOutCurrentUser() async {
-    try {
-      final result = await Amplify.Auth.signOut();
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.clear();
-      if (result is CognitoCompleteSignOut && mounted) {
-        safePrint('Sign out completed successfully');
-        context.go('/Login');
-      } else if (result is CognitoFailedSignOut) {
-        safePrint('Error signing user out: ${result.exception.message}');
-      }
-    } catch (e) {
-        safePrint('');
-    }
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,49 +114,6 @@ class LoginScreenState extends State<LoginScreen>{
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 16, right: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    child: const Text(
-                      'Forgot password?',
-                    ),
-                    onTap: () {
-                      //TODO go to forgot password page
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16, right: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    child: const Text(
-                      'Privacy',
-                    ),
-                    onTap: () {
-                      //TODO go to privacy page
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-              padding: const EdgeInsets.only(top: 15.0, left: 16, right: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red
-                  ),
-                  onPressed: () {
-                    signOutCurrentUser();
-                  },
-                  child: const Text('Sign Out'),
-                ),
-              ),
-            ),
             ]
           )
       )
