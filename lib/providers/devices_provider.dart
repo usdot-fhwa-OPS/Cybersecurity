@@ -7,18 +7,25 @@ import '../models/devices_repository.dart';
 class DevicesProvider with ChangeNotifier {
   List<ITSDevice>? devices = []; 
 
-  Future<void> fetchDevicesList(bool isConnected) async {
-    
-    await DevicesRepository().getDevices();
-    
-    
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    
-    final String? decodedResponse = prefs.getString('apiData');
-    final parsedJson = jsonDecode(decodedResponse!);
-    final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
-    
-    devices = apiData.map((json) => ITSDevice.fromJson(json)).toList();
+  Future<void> fetchDevicesList() async {
+    try {
+      await DevicesRepository().getDevices();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      
+      final String? decodedResponse = prefs.getString('apiData');
+      final parsedJson = jsonDecode(decodedResponse!);
+      final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+      
+      devices = apiData.map((json) => ITSDevice.fromJson(json)).toList();
+    } catch (e) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      
+      final String? decodedResponse = prefs.getString('apiData');
+      final parsedJson = jsonDecode(decodedResponse!);
+      final List<dynamic> apiData = parsedJson['Items'] as List<dynamic>;
+      
+      devices = apiData.map((json) => ITSDevice.fromJson(json)).toList();
+    }
     notifyListeners();
   }
 

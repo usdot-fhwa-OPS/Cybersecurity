@@ -39,28 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final _userEditTextController = TextEditingController();
   Set<String> categories = <String>{};
   Map<String, ITSDevice> recentSearches = {};
-  late StreamSubscription subscription;
-  bool isDeviceConnected = false;
-  bool isAlertSet = false;
-
-  getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-        },
-      );
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
-  }
-
+ 
   @override
   void initState() {
     super.initState();
-    isDeviceConnected = false;
-    Provider.of<DevicesProvider>(context, listen: false).fetchDevicesList(isDeviceConnected);
+    Provider.of<DevicesProvider>(context, listen: false).fetchDevicesList();
   }
 
   @override
