@@ -6,6 +6,7 @@ class DevicesRepository {
   Future<void> getDevices() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
+
       //api results
       final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
       final idToken = session.userPoolTokensResult.value.idToken.raw;
@@ -28,6 +29,7 @@ class DevicesRepository {
       // return apiData.map((json) => ITSDevice.fromJson(json)).toList();
       
     } on ApiException catch (e) {
+      print('here');
       throw Exception('Get call failed: $e');
     } 
   }

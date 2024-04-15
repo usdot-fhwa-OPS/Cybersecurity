@@ -54,9 +54,9 @@ class DetailsScreenState extends State<DetailsScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          DeviceDropdown(dropdownLabel: 'Vendor', dropdownList: [device.deviceBrand], dropdownController: vendorController, selectedItem: selectedVendor),
+          DeviceDropdown(dropdownLabel: 'Device Vendor', dropdownList: [device.deviceBrand], dropdownController: vendorController, selectedItem: selectedVendor),
           DeviceDropdown(dropdownLabel: 'Device Type', dropdownList: [device.deviceType], dropdownController: deviceController, selectedItem: selectedType),
-          DeviceDropdown(dropdownLabel: 'Model', dropdownList: [device.deviceModel], dropdownController: modelController, selectedItem: selectedModel),
+          DeviceDropdown(dropdownLabel: 'Device Model', dropdownList: [device.deviceModel], dropdownController: modelController, selectedItem: selectedModel),
 
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
