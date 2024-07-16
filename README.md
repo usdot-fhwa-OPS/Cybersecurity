@@ -132,3 +132,7 @@ class MyApp extends StatelessWidget {
 }
 
 ```
+
+## Related Repositories:
+ - [Cybersecurity-ITS-Frontend](https://github.com/usdot-fhwa-OPS/Cybersecurity-ITS-Frontend): The cloud-hosted user interface for Vendor users to upload and manage device configuration recommendations.
+ - [ITS-Cybersecurity-ITS-Backend](https://github.com/usdot-fhwa-OPS/Cybersecurity-ITS-Backend): The backend cloud services to connect technician and vendor users.
