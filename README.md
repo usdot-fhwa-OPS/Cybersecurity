@@ -11,7 +11,7 @@ Vendor-customized and deployed ITS2P instances can be used by ITS Field Technici
 Download or clone this repo by using the link below:
 
 ```
-https://github.com/usdot-fhwa-OPS/Cybersecurity-ITS-App.git
+https://github.com/usdot-fhwa-OPS/ITS-Secure-Prototype-App.git
 ```
 
 **Step 2:**
