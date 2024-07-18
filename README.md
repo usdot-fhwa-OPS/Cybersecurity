@@ -135,4 +135,4 @@ class MyApp extends StatelessWidget {
 
 ## Related Repositories:
  - [ITS Secure Prototype Frontend](https://github.com/usdot-fhwa-OPS/ITS-Secure-Prototype-Frontend): The cloud-hosted user interface for Vendor users to upload and manage device configuration recommendations.
- - [ITS Secure Prototype Backend](https://github.com/usdot-fhwa-OPS/Cybersecurity-ITS-Backend): The backend cloud services to connect technician and vendor users.
+ - [ITS Secure Prototype Backend](https://github.com/usdot-fhwa-OPS/ITS-Secure-Prototype-Backend): The backend cloud services to connect technician and vendor users.
